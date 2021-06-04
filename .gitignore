@@ -1,2 +1,5 @@
 .nextflow.log/*
 .nextflow/cache/*
+.nextflow
+.hextflow/*
+.nextflow.*
