@@ -45,11 +45,12 @@ process star_align {
 	"""
 	STAR --genomeDir ${params.star_ref} --readFilesIn ${input_fastq} \
 	    --readFilesCommand gunzip -c --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ${params.star_out_dir}/${input_fastq.simpleName}/${input_fastq.simpleName} \
-   	 --alignIntronMin 50 --alignIntronMax 500000 \
+   	 --alignIntronMin ${params.alignIntronMin} --alignIntronMax ${params.alignIntronMax} \
     	--sjdbGTFfile ${params.star_gtf} \
     	--outSAMprimaryFlag OneBestScore --twopassMode Basic \
     	--outReadsUnmapped Fastx \
-    	--seedSearchStartLmax 15  \
-    	--outFilterScoreMinOverLread 0 --outFilterMatchNminOverLread 0  --outFilterMatchNmin 50
+    	--seedSearchStartLmax ${params.seedSearchStartLmax}  \
+    	--outFilterScoreMinOverLread ${params.outFilterScoreMinOverLread} --outFilterMatchNminOverLread ${params.outFilterMatchNminOverLread} \
+	--outFilterMatchNmin ${params.outFilterMatchNmin}
 	"""
 }		
