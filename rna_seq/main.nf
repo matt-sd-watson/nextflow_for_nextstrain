@@ -23,10 +23,10 @@ process star_align {
 
 	script: 
 	"""
-	STAR --genomeDir /Users/mattsdwatson/star/index/vib_reference/ --readFilesIn ${input_fastq} \
+	STAR --genomeDir ${params.star_ref} --readFilesIn ${input_fastq} \
 	    --readFilesCommand gunzip -c --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ${params.star_out_dir}/${input_fastq.simpleName}/${input_fastq.simpleName} \
    	 --alignIntronMin 50 --alignIntronMax 500000 \
-    	--sjdbGTFfile /Users/mattsdwatson/star/index/vib_annotations/exp2323-genes.gtf \
+    	--sjdbGTFfile ${params.star_gtf} \
     	--outSAMprimaryFlag OneBestScore --twopassMode Basic \
     	--outReadsUnmapped Fastx \
     	--seedSearchStartLmax 15  \
