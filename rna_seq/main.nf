@@ -1,3 +1,4 @@
+nextflow.enable.dsl=2
 
 fastq_files = Channel.fromPath("${params.input_dir}/*.fastq.gz").into { datasets_fastqc; datasets_align }
 
