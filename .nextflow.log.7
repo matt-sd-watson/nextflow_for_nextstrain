@@ -1,0 +1,101 @@
+Jun.-03 20:34:19.082 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf --input_dir /Users/mattsdwatson/VIB_proj_3425/fastq --out_dir /Users/mattsdwatson/fastqc_output/
+Jun.-03 20:34:19.234 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.04.1
+Jun.-03 20:34:19.269 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [kickass_ramanujan] - revision: 0acb9e4fc7
+Jun.-03 20:34:19.420 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/Users/mattsdwatson/.nextflow/plugins
+Jun.-03 20:34:19.422 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Jun.-03 20:34:19.426 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins local root: .nextflow/plr/empty
+Jun.-03 20:34:19.446 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Jun.-03 20:34:19.448 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Jun.-03 20:34:19.453 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Jun.-03 20:34:19.469 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Jun.-03 20:34:19.544 [main] DEBUG nextflow.Session - Session uuid: 2e024064-f6c5-4b7b-b704-bbdb895132a2
+Jun.-03 20:34:19.544 [main] DEBUG nextflow.Session - Run name: kickass_ramanujan
+Jun.-03 20:34:19.547 [main] DEBUG nextflow.Session - Executor pool size: 4
+Jun.-03 20:34:19.599 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.04.1 build 5556
+  Created: 14-05-2021 15:20 UTC (11:20 EDT)
+  System: Mac OS X 10.16
+  Runtime: Groovy 3.0.7 on Java HotSpot(TM) 64-Bit Server VM 13.0.2+8
+  Encoding: UTF-8 (UTF-8)
+  Process: 10535@Matthews-MacBook-Pro.local [127.0.0.1]
+  CPUs: 4 - Mem: 16 GB (7.9 GB) - Swap: 2 GB (1.7 GB)
+Jun.-03 20:34:19.624 [main] DEBUG nextflow.Session - Work-dir: /Users/mattsdwatson/nextflow_rna/work [Mac OS X]
+Jun.-03 20:34:19.624 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/mattsdwatson/nextflow_rna/bin
+Jun.-03 20:34:19.639 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Jun.-03 20:34:19.656 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Jun.-03 20:34:19.769 [main] DEBUG nextflow.Session - Session start invoked
+Jun.-03 20:34:20.657 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jun.-03 20:34:20.671 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: fastqc
+Jun.-03 20:34:20.714 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /Users/mattsdwatson/VIB_proj_3425/fastq/; pattern: *.fastq.gz; options: [:]
+Jun.-03 20:34:20.845 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Jun.-03 20:34:20.845 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jun.-03 20:34:20.851 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Jun.-03 20:34:20.857 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=16 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Jun.-03 20:34:20.971 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Jun.-03 20:34:20.972 [main] DEBUG nextflow.Session - Session await
+Jun.-03 20:34:21.309 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:34:21.316 [Task submitter] INFO  nextflow.Session - [68/8cc95f] Submitted process > fastqc (1)
+Jun.-03 20:34:21.326 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:34:21.328 [Task submitter] INFO  nextflow.Session - [b8/dd2f42] Submitted process > fastqc (4)
+Jun.-03 20:34:21.334 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:34:21.337 [Task submitter] INFO  nextflow.Session - [6c/8aeb4f] Submitted process > fastqc (3)
+Jun.-03 20:34:21.347 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:34:21.352 [Task submitter] INFO  nextflow.Session - [14/ea4ccc] Submitted process > fastqc (5)
+Jun.-03 20:34:46.450 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 5; name: fastqc (5); status: COMPLETED; exit: 0; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/14/ea4ccc7e9f8af03caf113f818bd572]
+Jun.-03 20:34:46.458 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:34:46.459 [Task submitter] INFO  nextflow.Session - [16/92b9d1] Submitted process > fastqc (2)
+Jun.-03 20:34:46.476 [Task monitor] DEBUG nextflow.processor.TaskProcessor - Process `fastqc (5)` is unable to find [UnixPath]: `/Users/mattsdwatson/nextflow_rna/work/14/ea4ccc7e9f8af03caf113f818bd572/ARE36_HT_S39_L004_R1_001_fastqc.html` (pattern: `ARE36_HT_S39_L004_R1_001_fastqc.html`)
+Jun.-03 20:34:46.521 [Task monitor] ERROR nextflow.processor.TaskProcessor - Error executing process > 'fastqc (5)'
+
+Caused by:
+  Missing output file(s) `ARE36_HT_S39_L004_R1_001_fastqc.html` expected by process `fastqc (5)`
+
+Command executed:
+
+  fastqc -t 5 ARE36_HT_S39_L004_R1_001.fastq.gz -o /Users/mattsdwatson/fastqc_output/
+
+Command exit status:
+  0
+
+Command output:
+  Analysis complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+
+Command error:
+  Started analysis of ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 5% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 10% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 15% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 20% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 25% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 30% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 35% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 40% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 45% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 50% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 55% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 60% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 65% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 70% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 75% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 80% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 85% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 90% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+  Approx 95% complete for ARE36_HT_S39_L004_R1_001.fastq.gz
+
+Work dir:
+  /Users/mattsdwatson/nextflow_rna/work/14/ea4ccc7e9f8af03caf113f818bd572
+
+Tip: you can try to figure out what's wrong by changing to the process work dir and showing the script file named `.command.sh`
+Jun.-03 20:34:46.532 [Task monitor] DEBUG nextflow.Session - Session aborted -- Cause: Missing output file(s) `ARE36_HT_S39_L004_R1_001_fastqc.html` expected by process `fastqc (5)`
+Jun.-03 20:34:46.587 [main] DEBUG nextflow.Session - Session await > all process finished
+Jun.-03 20:34:46.591 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Jun.-03 20:34:46.601 [main] WARN  n.processor.TaskPollingMonitor - Killing pending tasks (4)
+Jun.-03 20:34:46.688 [main] DEBUG nextflow.executor.LocalTaskHandler - Unable to kill fastqc (4) -- command: kill -TERM 10570; exit: 1 
+ bash: line 0: kill: (10570) - No such process
+
+Jun.-03 20:34:46.752 [main] DEBUG nextflow.executor.LocalTaskHandler - Unable to kill fastqc (3) -- command: kill -TERM 10571; exit: 1 
+ bash: line 0: kill: (10571) - No such process
+
+Jun.-03 20:34:46.782 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=10; submittedCount=1; runningCount=-1; retriesCount=0; abortedCount=4; succeedDuration=0ms; failedDuration=25.1s; cachedDuration=0ms;loadCpus=-1; loadMemory=0; peakRunning=4; peakCpus=4; peakMemory=0; ]
+Jun.-03 20:34:46.835 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Jun.-03 20:34:46.853 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

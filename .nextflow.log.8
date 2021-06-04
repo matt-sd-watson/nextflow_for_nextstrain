@@ -1,0 +1,40 @@
+Jun.-03 20:33:42.561 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf --input_dir /Users/mattsdwatson/VIB_proj_3425/fastq --out_dir /Users/mattsdwatson/fastqc_output/
+Jun.-03 20:33:42.712 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.04.1
+Jun.-03 20:33:42.745 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [goofy_joliot] - revision: cf90a30911
+Jun.-03 20:33:42.871 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/Users/mattsdwatson/.nextflow/plugins
+Jun.-03 20:33:42.874 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Jun.-03 20:33:42.876 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins local root: .nextflow/plr/empty
+Jun.-03 20:33:42.887 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Jun.-03 20:33:42.888 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Jun.-03 20:33:42.892 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Jun.-03 20:33:42.906 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Jun.-03 20:33:42.986 [main] DEBUG nextflow.Session - Session uuid: 8357023d-506e-452c-8003-ee20a8816a32
+Jun.-03 20:33:42.986 [main] DEBUG nextflow.Session - Run name: goofy_joliot
+Jun.-03 20:33:42.990 [main] DEBUG nextflow.Session - Executor pool size: 4
+Jun.-03 20:33:43.248 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.04.1 build 5556
+  Created: 14-05-2021 15:20 UTC (11:20 EDT)
+  System: Mac OS X 10.16
+  Runtime: Groovy 3.0.7 on Java HotSpot(TM) 64-Bit Server VM 13.0.2+8
+  Encoding: UTF-8 (UTF-8)
+  Process: 10497@Matthews-MacBook-Pro.local [127.0.0.1]
+  CPUs: 4 - Mem: 16 GB (7.9 GB) - Swap: 2 GB (1.7 GB)
+Jun.-03 20:33:43.270 [main] DEBUG nextflow.Session - Work-dir: /Users/mattsdwatson/nextflow_rna/work [Mac OS X]
+Jun.-03 20:33:43.270 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/mattsdwatson/nextflow_rna/bin
+Jun.-03 20:33:43.285 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Jun.-03 20:33:43.302 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Jun.-03 20:33:43.428 [main] DEBUG nextflow.Session - Session start invoked
+Jun.-03 20:33:44.353 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jun.-03 20:33:44.367 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: fastqc
+Jun.-03 20:33:44.419 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /Users/mattsdwatson/VIB_proj_3425/; pattern: fastq*.fastq.gz; options: [:]
+Jun.-03 20:33:44.559 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Jun.-03 20:33:44.560 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jun.-03 20:33:44.566 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Jun.-03 20:33:44.572 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=16 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Jun.-03 20:33:44.700 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Jun.-03 20:33:44.700 [main] DEBUG nextflow.Session - Session await
+Jun.-03 20:33:44.717 [main] DEBUG nextflow.Session - Session await > all process finished
+Jun.-03 20:33:44.790 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Jun.-03 20:33:44.804 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=0; peakCpus=0; peakMemory=0; ]
+Jun.-03 20:33:44.925 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Jun.-03 20:33:44.951 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

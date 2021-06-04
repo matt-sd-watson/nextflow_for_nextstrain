@@ -1,0 +1,71 @@
+Jun.-03 20:57:03.438 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf --input_dir /Users/mattsdwatson/VIB_proj_3425/fastq --out_dir /Users/mattsdwatson/fastqc_output/ --star_out_dir /Users/mattsdwatson/fastqc_output/
+Jun.-03 20:57:03.600 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.04.1
+Jun.-03 20:57:03.629 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [distracted_noyce] - revision: ec1c42d753
+Jun.-03 20:57:03.771 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/Users/mattsdwatson/.nextflow/plugins
+Jun.-03 20:57:03.773 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Jun.-03 20:57:03.777 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins local root: .nextflow/plr/empty
+Jun.-03 20:57:03.789 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Jun.-03 20:57:03.790 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Jun.-03 20:57:03.796 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Jun.-03 20:57:03.830 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Jun.-03 20:57:03.902 [main] DEBUG nextflow.Session - Session uuid: f04f6e3e-a612-447d-9264-830303121975
+Jun.-03 20:57:03.902 [main] DEBUG nextflow.Session - Run name: distracted_noyce
+Jun.-03 20:57:03.905 [main] DEBUG nextflow.Session - Executor pool size: 4
+Jun.-03 20:57:03.955 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.04.1 build 5556
+  Created: 14-05-2021 15:20 UTC (11:20 EDT)
+  System: Mac OS X 10.16
+  Runtime: Groovy 3.0.7 on Java HotSpot(TM) 64-Bit Server VM 13.0.2+8
+  Encoding: UTF-8 (UTF-8)
+  Process: 11690@Matthews-MacBook-Pro.local [127.0.0.1]
+  CPUs: 4 - Mem: 16 GB (6.9 GB) - Swap: 1 GB (798.5 MB)
+Jun.-03 20:57:03.977 [main] DEBUG nextflow.Session - Work-dir: /Users/mattsdwatson/nextflow_rna/work [Mac OS X]
+Jun.-03 20:57:03.977 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/mattsdwatson/nextflow_rna/bin
+Jun.-03 20:57:03.990 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Jun.-03 20:57:04.009 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Jun.-03 20:57:04.171 [main] DEBUG nextflow.Session - Session start invoked
+Jun.-03 20:57:05.097 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jun.-03 20:57:05.111 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: fastqc, star_align
+Jun.-03 20:57:05.158 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /Users/mattsdwatson/VIB_proj_3425/fastq/; pattern: *.fastq.gz; options: [:]
+Jun.-03 20:57:05.344 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Jun.-03 20:57:05.344 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jun.-03 20:57:05.352 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Jun.-03 20:57:05.359 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=16 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Jun.-03 20:57:05.468 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Jun.-03 20:57:05.469 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jun.-03 20:57:05.473 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Jun.-03 20:57:05.473 [main] DEBUG nextflow.Session - Session await
+Jun.-03 20:57:05.803 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:57:05.811 [Task submitter] INFO  nextflow.Session - [f0/35cd4f] Submitted process > star_align (1)
+Jun.-03 20:57:05.844 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:57:05.845 [Task submitter] INFO  nextflow.Session - [a7/a9f2d0] Submitted process > fastqc (2)
+Jun.-03 20:57:05.862 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:57:05.863 [Task submitter] INFO  nextflow.Session - [cf/994e96] Submitted process > star_align (3)
+Jun.-03 20:57:05.885 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:57:05.887 [Task submitter] INFO  nextflow.Session - [f3/8cfb01] Submitted process > star_align (2)
+Jun.-03 20:57:59.355 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: fastqc (2); status: COMPLETED; exit: 0; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/a7/a9f2d07f6962517b1e21c5ee9f9425]
+Jun.-03 20:57:59.709 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:57:59.710 [Task submitter] INFO  nextflow.Session - [5e/20da3b] Submitted process > fastqc (4)
+Jun.-03 20:58:29.750 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 4; name: fastqc (4); status: COMPLETED; exit: 0; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/5e/20da3b970804a2b660863456c71711]
+Jun.-03 20:58:29.783 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:58:29.786 [Task submitter] INFO  nextflow.Session - [af/759b46] Submitted process > fastqc (1)
+Jun.-03 20:58:57.971 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: fastqc (1); status: COMPLETED; exit: 0; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/af/759b46286ab1826d6f6b8f2760d34a]
+Jun.-03 20:58:57.994 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 20:58:57.995 [Task submitter] INFO  nextflow.Session - [41/edd55a] Submitted process > star_align (4)
+Jun.-03 21:00:33.146 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 7; name: star_align (3); status: COMPLETED; exit: 130; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/cf/994e963e14cea7a3c066485a10a4b5]
+Jun.-03 21:00:33.304 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jun.-03 21:00:33.308 [Task submitter] INFO  nextflow.Session - [b4/46c609] Submitted process > fastqc (7)
+Jun.-03 21:00:33.600 [SIGINT handler] DEBUG nextflow.Session - Session aborted -- Cause: SIGINT
+Jun.-03 21:00:33.698 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: star_align (2); status: COMPLETED; exit: 130; error: -; workDir: /Users/mattsdwatson/nextflow_rna/work/f3/8cfb018727ccf2e3eb21445cbdc68e]
+Jun.-03 21:00:33.880 [main] DEBUG nextflow.Session - Session await > all process finished
+Jun.-03 21:00:33.880 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Jun.-03 21:00:33.982 [main] WARN  n.processor.TaskPollingMonitor - Killing pending tasks (3)
+Jun.-03 21:00:34.036 [main] DEBUG nextflow.executor.LocalTaskHandler - Unable to kill star_align (1) -- command: kill -TERM 11724; exit: 1 
+ bash: line 0: kill: (11724) - No such process
+
+Jun.-03 21:00:34.050 [main] DEBUG nextflow.executor.LocalTaskHandler - Unable to kill star_align (4) -- command: kill -TERM 11855; exit: 1 
+ bash: line 0: kill: (11855) - No such process
+
+Jun.-03 21:00:34.088 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=3; failedCount=2; ignoredCount=0; cachedCount=0; pendingCount=22; submittedCount=1; runningCount=-1; retriesCount=0; abortedCount=3; succeedDuration=1m 50s; failedDuration=6m 55s; cachedDuration=0ms;loadCpus=-1; loadMemory=0; peakRunning=4; peakCpus=4; peakMemory=0; ]
+Jun.-03 21:00:34.182 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Jun.-03 21:00:34.275 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
