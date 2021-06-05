@@ -18,15 +18,16 @@ process fastqc {
 adapter_seqs = Channel.fromPath("${params.adapter_csv}").splitCsv(header:true).map{row -> tuple(row.adapter, row.sample) }
 
 process adapter_trim {
+	
+	publishDir = "${params.out_dir}"
 
 	input: 
 	set adapter, sample from adapter_seqs
 	file untrimmed from datasets_to_trim
-	
-	output: 
-	
-	file "${params.star_out_dir}/${untrimmed.simpleName}_adaptertrimmed.fastq.gz" into trimmed_fastqs
 
+	output: 
+	file "${untrimmed.simpleName}_adaptertrimmed.fastq.gz" into trimmed_seqs
+	
 	script: 
 	"""
 	cutadapt -q 20 -a ${adapter} -o ${params.star_out_dir}/${untrimmed.simpleName}_adaptertrimmed.fastq.gz ${untrimmed}
@@ -39,7 +40,7 @@ process star_align {
 	publishDir = "${params.star_out_dir}"
 	
 	input: 
-	file input_fastq from trimmed_fastqs
+	file input_fastq from trimmed_seqs
 
 	script: 
 	"""
