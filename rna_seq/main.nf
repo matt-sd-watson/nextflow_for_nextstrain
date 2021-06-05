@@ -22,6 +22,10 @@ process adapter_trim {
 	input: 
 	set adapter, sample from adapter_seqs
 	file untrimmed from datasets_to_trim
+	
+	output: 
+	
+	file "${params.star_out_dir}/${untrimmed.simpleName}_adaptertrimmed.fastq.gz" into trimmed_fastqs
 
 	script: 
 	"""
@@ -35,7 +39,7 @@ process star_align {
 	publishDir = "${params.star_out_dir}"
 	
 	input: 
-	file input_fastq from datasets_to_align
+	file input_fastq from trimmed_fastqs
 
 	script: 
 	"""
