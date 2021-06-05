@@ -1,6 +1,5 @@
-nextflow.enable.dsl=2
 
-fastq_files = Channel.fromPath("${params.input_dir}/*.fastq.gz").into { datasets_fastqc; datasets_align }
+fastq_files = Channel.fromPath("${params.input_dir}/*.fastq.gz").into { datasets_fastqc; datasets_to_trim; datasets_to_align }
 
 process fastqc {
 
@@ -16,21 +15,17 @@ process fastqc {
 }
 
 
-adapter_seqs = Channel.fromPath(${params.adapter_csv}).splitCsv(header:true).map{row -> tuple(sample_id, adapter) }
+adapter_seqs = Channel.fromPath("${params.adapter_csv}").splitCsv(header:true).map{row -> tuple(row.adapter, row.sample) }
 
 process adapter_trim {
 
 	input: 
-	set sample_id, adapter from adapter_seqs
-
-
-	output: 
-
-	file "${sample_id}_adaptertrimmed.fastq.gz" into trimmed_seqs
+	set adapter, sample from adapter_seqs
+	file untrimmed from datasets_to_trim
 
 	script: 
 	"""
-	cutadapt -q 20 -a ${adapter} -o ${params.star_out_dir}/${sample_id}_adaptertrimmed.fastq.gz
+	cutadapt -q 20 -a ${adapter} -o ${params.star_out_dir}/${untrimmed.simpleName}_adaptertrimmed.fastq.gz ${untrimmed}
 	"""
 }
 
@@ -40,7 +35,7 @@ process star_align {
 	publishDir = "${params.star_out_dir}"
 	
 	input: 
-	file input_fastq from trimmed_seqs
+	file input_fastq from datasets_to_align
 
 	script: 
 	"""
