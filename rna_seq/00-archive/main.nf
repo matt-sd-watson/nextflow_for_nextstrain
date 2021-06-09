@@ -1,11 +1,11 @@
-nextflow.enable.dsl=2
+fastq_files = Channel.fromPath("${params.input_dir}/*.fastq.gz").into { datasets_fastqc; datasets_to_trim; datasets_to_align }
 
 process fastqc {
 
 	publishDir = "${params.out_dir}/"
 
 	input: 
-	file input_fastq
+	file input_fastq from datasets_fastqc
 
 	script: 
 	"""
@@ -14,17 +14,19 @@ process fastqc {
 }
 
 
+adapter_seqs = Channel.fromPath("${params.adapter_csv}").splitCsv(header:true).map{row -> tuple(row.adapter, row.sample_id) }
+
 process adapter_trim {
 	
 	publishDir = "${params.out_dir}/"
 
 	input: 
-	tuple val(adapter), val(sample_id)
-	file untrimmed
+	set adapter, sample_id from adapter_seqs
+	file untrimmed from datasets_to_trim
 
 	output: 
 
-	file "${untrimmed.simpleName}_adaptertrimmed.fastq.gz"
+	file "${untrimmed.simpleName}_adaptertrimmed.fastq.gz" into trimmed_seqs
 	
 	script: 
 	"""
@@ -34,15 +36,15 @@ process adapter_trim {
 
 process star_align {
 
-	publishDir = "${params.out_dir}/"
+	publishDir = "${params.out_dir}"
 	
 	input: 
-	file trimmed_fastq
+	file input_fastq from trimmed_seqs
 
 	script: 
 	"""
-	STAR --genomeDir ${params.star_ref} --readFilesIn ${trimmed_fastq} \
-	    --readFilesCommand gunzip -c --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ${params.out_dir}/${trimmed_fastq.simpleName}/${trimmed_fastq.simpleName} \
+	STAR --genomeDir ${params.star_ref} --readFilesIn ${input_fastq} \
+	    --readFilesCommand gunzip -c --outSAMtype BAM SortedByCoordinate --outFileNamePrefix ${params.out_dir}/${input_fastq.simpleName}/${input_fastq.simpleName} \
    	 --alignIntronMin ${params.alignIntronMin} --alignIntronMax ${params.alignIntronMax} \
     	--sjdbGTFfile ${params.star_gtf} \
     	--outSAMprimaryFlag OneBestScore --twopassMode Basic \
@@ -52,14 +54,3 @@ process star_align {
 	--outFilterMatchNmin ${params.outFilterMatchNmin}
 	"""
 }
-
-
-workflow {
-
-	fastq_files = Channel.fromPath("${params.input_dir}/*.fastq.gz")
-	adapter_seqs = Channel.fromPath("${params.adapter_csv}").splitCsv(header:true).map{row -> tuple(row.adapter, row.sample_id) }
-	main: 
-	   fastqc(fastq_files)
-	   adapter_trim(adapter_seqs, fastq_files)
-	   star_align(adapter_trim.out)
-}			
