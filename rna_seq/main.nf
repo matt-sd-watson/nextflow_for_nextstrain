@@ -20,15 +20,14 @@ process adapter_trim {
 
 	input: 
 	tuple val(adapter), val(sample_id)
-	file untrimmed
 
 	output: 
 
-	file "${untrimmed.simpleName}_adaptertrimmed.fastq.gz"
+	file "${sample_id}_adaptertrimmed.fastq.gz"
 	
 	script: 
 	"""
-	cutadapt -q 20 -a ${adapter} -o ${untrimmed.simpleName}_adaptertrimmed.fastq.gz ${untrimmed}
+	cutadapt -q 20 -a ${adapter} -o ${sample_id}_adaptertrimmed.fastq.gz ${params.input_dir}/${sample_id}.fastq.gz
 	"""
 }
 
@@ -60,6 +59,6 @@ workflow {
 	adapter_seqs = Channel.fromPath("${params.adapter_csv}").splitCsv(header:true).map{row -> tuple(row.adapter, row.sample_id) }
 	main: 
 	   fastqc(fastq_files)
-	   adapter_trim(adapter_seqs, fastq_files)
+	   adapter_trim(adapter_seqs)
 	   star_align(adapter_trim.out)
 }			
