@@ -3,3 +3,4 @@
 .nextflow
 .hextflow/*
 .nextflow.*
+.Rhistory*
