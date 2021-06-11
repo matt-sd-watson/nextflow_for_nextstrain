@@ -50,8 +50,6 @@ pho_data <- pho_data[pho_data$GISAID.Clade != "",]
 gisaid_no_outbreak <- pho_data[pho_data$OB_Id == "",]
 gisaid_outbreak <- pho_data[pho_data$OB_Id != "",]
 
-
-
 gisaid_filter_outbreak <- gisaid_outbreak[with(gisaid_outbreak, do.call(order, list(OB_Id))), ]
 # specify the fields to group by in list
 # specify how many samples per grouping to retain with head
