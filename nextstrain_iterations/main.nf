@@ -9,20 +9,18 @@ binDir = Paths.get(workflow.projectDir.toString(), "bin")
 
 process create_subset {
 
-	publishDir = "${params.output_dir}/metadata/"
+	publishDir path: "${params.output_dir}/${category}/"
 
 	input: 
 	val metadata
-	val rep
+	val category
 	
 	output:
-	path "rep_${rep}.csv"
+	path "${category}.csv"
 
 	script: 
 	"""
-	mkdir -p ${params.output_dir}
-
-	Rscript $binDir/process_metadata_nextstrain.R --input_metadata ${metadata} --output_file rep_${rep}.csv --subset_number ${params.subset_number} --rep ${rep}
+	Rscript $binDir/process_metadata_nextstrain.R --input_metadata ${metadata} --output_file ${category}.csv --subset_number ${params.subset_number} --category ${category}
 	"""
 	
 }
@@ -30,7 +28,7 @@ process create_subset {
 
 process create_fasta {
 
-	publishDir = "${params.output_dir}/fasta/"
+	publishDir path: "${params.output_dir}/${metadata_sheet.simpleName}/"
 
 	input: 
 	path metadata_sheet
@@ -48,7 +46,7 @@ process create_fasta {
 
 process rename_headers {
 
-	publishDir = "${params.output_dir}/renamed_fasta/"
+	publishDir path: "${params.output_dir}/${fasta.simpleName}/"
 
 	input: 
 	file fasta
@@ -58,17 +56,16 @@ process rename_headers {
 
 	script: 
 	"""
-	mkdir -p ${params.output_dir}/renamed_fasta/
-	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${params.output_dir}/metadata/${fasta.simpleName}.csv -o . -c Nextstrain
+	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${params.output_dir}/${fasta.simpleName}/${fasta.simpleName}.csv -o . -c Nextstrain
 	"""
 }
 
 process nextstrain_filter {
 
 
-	publishDir = "${params.output_dir}/filtered_fasta/"
+	publishDir path: "${params.output_dir}/${split_name}/"
 
-	input:
+	input: 
 	file renamed_fasta
 
 	output: 
@@ -77,16 +74,14 @@ process nextstrain_filter {
 	script: 
 	split_name = renamed_fasta.name.split('_renamed')[0]
 	"""
-	mkdir -p ${params.output_dir}/filtered_fasta/
-	augur filter --sequences ${renamed_fasta} --metadata ${params.output_dir}/metadata/${split_name}.csv --output ${split_name}_filtered.fasta --min-date 2020
+	augur filter --sequences ${renamed_fasta} --metadata ${params.output_dir}/${split_name}/${split_name}.csv --output ${split_name}_filtered.fasta --min-date 2020
 	"""
 }
 
 
 process nextstrain_align {
 
-	// publish to multiple output directories, one for each alignment
-	publishDir path: "${params.output_dir}/align/${filtered_fasta.simpleName}"
+	publishDir path: "${params.output_dir}/${split_name_align}/"
 
 	input: 
 	file filtered_fasta
@@ -94,9 +89,9 @@ process nextstrain_align {
 	output: 
 	file "${filtered_fasta.simpleName}_aln.fasta"
 
-	script: 
+	script:
+	split_name_align = filtered_fasta.simpleName.split('_filtered')[0]
 	"""
-	mkdir -p ${params.output_dir}/align/
 	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${filtered_fasta.simpleName}_aln.fasta --nthreads auto --fill-gaps
 	"""
 }
