@@ -204,20 +204,20 @@ process nextstrain_translate {
 
 process nextstrain_clades {
 
-	publishDir path: "${params.output_dir}/${split_name_nuc}/"
+	publishDir path: "${params.output_dir}/${split_name_aa}/"
 
 	input: 
-	file nucleotide_json
+	file amino_acid_json
 
 	output: 
-	file "${split_name_nuc}_clades.json"
+	file "${split_name_aa}_clades.json"
 
 	script:
-	split_name_nuc = nucleotide_json.simpleName.split('_nt_muts')[0]
+	split_name_aa = amino_acid_json.simpleName.split('_aa_muts')[0]
 	"""
-	augur clades --tree ${params.output_dir}/${split_name_nuc}/${split_name_nuc}_tree_refined.nwk \
-	--mutations ${nucleotide_json} \
-	${params.output_dir}/${split_name_nuc}_aa_muts.json --clades ${params.clades} --output-node-data ${split_name_nuc}_clades.json
+	augur clades --tree ${params.output_dir}/${split_name_aa}/${split_name_aa}_tree_refined.nwk \
+	--mutations ${params.output_dir}/${split_name_aa}/${split_name_aa}_nt_muts.json ${amino_acid_json} \
+	--clades ${params.clades} --output-node-data ${split_name_aa}_clades.json
 	"""
 
 }
@@ -230,14 +230,14 @@ process nextstrain_export {
 	file clades
 
 	output: 
-	file "${category}_ncov.json"
+	file "${split_name_clades}_ncov.json"
 
 	script:
 	split_name_clades = clades.simpleName.split('_clades')[0]
 	"""
 	mkdir -p ${params.output_dir}/all/
 	augur export v2   --tree ${params.output_dir}/${split_name_clades}/${split_name_clades}_tree_refined.nwk \
-	--metadata ${split_name_clades}/${split_name_clades}/${split_name_clades}.csv \
+	--metadata ${params.output_dir}/${split_name_clades}/${split_name_clades}.csv \
 	--node-data ${params.output_dir}/${split_name_clades}/${split_name_clades}_branch_lengths.json \
                     ${params.output_dir}/${split_name_clades}/${split_name_clades}_traits.json \
 		    ${params.output_dir}/${split_name_clades}/${split_name_clades}_nt_muts.json \
@@ -268,7 +268,7 @@ workflow {
 	   nextstrain_traits(nextstrain_tree_refine.out)
 	   nextstrain_ancestral(nextstrain_tree_refine.out)
 	   nextstrain_translate(nextstrain_ancestral.out)
-	   nextstrain_clades(nextstrain_ancestral.out)
+	   nextstrain_clades(nextstrain_translate.out)
 	   nextstrain_export(nextstrain_clades.out)
 	
 }
