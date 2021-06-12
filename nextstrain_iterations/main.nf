@@ -9,7 +9,7 @@ binDir = Paths.get(workflow.projectDir.toString(), "bin")
 
 process create_subset {
 
-	publishDir path: "${params.output_dir}/${category}/"
+	publishDir path: "${params.output_dir}/${category}/", mode: "copy"
 
 	input: 
 	val metadata
@@ -28,7 +28,7 @@ process create_subset {
 
 process create_fasta {
 
-	publishDir path: "${params.output_dir}/${metadata_sheet.simpleName}/"
+	publishDir path: "${params.output_dir}/${metadata_sheet.simpleName}/", mode: "copy"
 
 	input: 
 	path metadata_sheet
@@ -46,7 +46,7 @@ process create_fasta {
 
 process rename_headers {
 
-	publishDir path: "${params.output_dir}/${fasta.simpleName}/"
+	publishDir path: "${params.output_dir}/${fasta.simpleName}/", mode: "copy"
 
 	input: 
 	file fasta
@@ -63,8 +63,7 @@ process rename_headers {
 process nextstrain_filter {
 
 
-	publishDir path: "${params.output_dir}/${split_name}/"
-
+	publishDir path: "${params.output_dir}/${split_name}/", mode: "copy"
 	input: 
 	file renamed_fasta
 
@@ -81,7 +80,7 @@ process nextstrain_filter {
 
 process nextstrain_align {
 
-	publishDir path: "${params.output_dir}/${split_name_align}/"
+	publishDir path: "${params.output_dir}/${split_name_align}/", mode: "copy"
 
 	input: 
 	file filtered_fasta
@@ -98,7 +97,7 @@ process nextstrain_align {
 
 process nextstrain_tree {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/"
+	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
 	input: 
 	file alignment
@@ -116,7 +115,7 @@ process nextstrain_tree {
 
 process nextstrain_tree_refine {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/"
+	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
 	input: 
 	file tree
@@ -145,7 +144,7 @@ process nextstrain_tree_refine {
 
 process nextstrain_traits {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/"
+	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
 	input: 
 	file refined_tree
@@ -165,7 +164,7 @@ process nextstrain_traits {
 
 process nextstrain_ancestral {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/"
+	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
 	input: 
 	file refined_tree
@@ -184,7 +183,7 @@ process nextstrain_ancestral {
 
 process nextstrain_translate {
 
-	publishDir path: "${params.output_dir}/${split_name_nuc}/"
+	publishDir path: "${params.output_dir}/${split_name_nuc}/", mode: "copy"
 
 	input: 
 	file nucleotide_json
@@ -204,7 +203,7 @@ process nextstrain_translate {
 
 process nextstrain_clades {
 
-	publishDir path: "${params.output_dir}/${split_name_aa}/"
+	publishDir path: "${params.output_dir}/${split_name_aa}/", mode: "copy"
 
 	input: 
 	file amino_acid_json
@@ -224,7 +223,7 @@ process nextstrain_clades {
 
 process nextstrain_export {
 
-	publishDir path: "${params.output_dir}/all/"
+	publishDir path: "${params.output_dir}/all/", mode: "copy"
 
 	input: 
 	file clades
