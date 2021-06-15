@@ -142,6 +142,36 @@ process nextstrain_tree_refine {
 
 }
 
+process nextstrain_tree_refine_clock_iterations {
+
+	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+
+	input: 
+	file tree
+	each clock
+	
+	output: 
+	file "${split_name_tree}_tree_refined_${clock}.nwk"
+
+	script:
+	split_name_tree = tree.simpleName.split('_tree')[0]
+	"""
+	augur refine \
+  	--tree ${tree} \
+  	--alignment ${params.output_dir}/${split_name_tree}/${split_name_tree}_aln.fasta \
+  	--metadata ${params.output_dir}/${split_name_tree}/${split_name_tree}.csv \
+  	--output-tree ${split_name_tree}_tree_refined_${clock}.nwk \
+  	--output-node-data ${params.output_dir}/${split_name_tree}/${split_name_tree}_branch_lengths_${clock}.json \
+  	--timetree \
+  	--coalescent opt \
+  	--date-confidence \
+  	--date-inference marginal \
+  	--clock-filter-iqd ${clock} \
+  	--keep-root > ${params.output_dir}/${split_name_tree}/augur_refine_${split_name_tree}_clock_${clock}.txt
+	"""	
+
+}
+
 process nextstrain_traits {
 
 	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
@@ -254,7 +284,8 @@ process nextstrain_export {
 workflow {
 	
 	// need to fix the python renaming script to be able to handle strings
-	iterations = Channel.of( 1, 2 )
+	iterations = Channel.of( 1, 2, 3, 4, 5, 6, 7, 8 )
+	clocks = Channel.of( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 )
 	metadata_file = params.metadata
 	main: 
            create_subset(metadata_file, iterations)
@@ -263,13 +294,8 @@ workflow {
 	   nextstrain_filter(rename_headers.out)
 	   nextstrain_align(nextstrain_filter.out)
 	   nextstrain_tree(nextstrain_align.out)
-	   nextstrain_tree_refine(nextstrain_tree.out)
-	   nextstrain_traits(nextstrain_tree_refine.out)
-	   nextstrain_ancestral(nextstrain_tree_refine.out)
-	   nextstrain_translate(nextstrain_ancestral.out)
-	   nextstrain_clades(nextstrain_translate.out)
-	   nextstrain_export(nextstrain_clades.out)
-	
+	   nextstrain_tree_refine_clock_iterations(nextstrain_tree.out, clocks)
+
 }
 
 
