@@ -33,7 +33,7 @@ process nextstrain_align {
 	script:
 	split_name_align = filtered_fasta.simpleName.split('_filtered')[0]
 	"""
-	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${split_name_align}_aln.fasta --nthreads auto --fill-gaps
+	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${split_name_align}_aln.fasta --nthreads ${params.threads} --fill-gaps
 	"""
 }
 
@@ -50,7 +50,7 @@ process nextstrain_tree {
 	script:
 	split_name_tree = alignment.simpleName.split('_aln')[0]
 	"""
-	augur tree --alignment ${alignment} --output ${split_name_tree}_tree.nwk --nthreads auto
+	augur tree --alignment ${alignment} --output ${split_name_tree}_tree.nwk --nthreads ${params.threads}
 	"""	
 
 }

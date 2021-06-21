@@ -21,12 +21,13 @@ import argparse
 def main():
 
     parser = argparse.ArgumentParser(description='Process fasta files and rename for Gisaid')
-    parser.add_argument('--sample_ids', '-s', type=str, help='Sample ID txt file with current and new names', required=True)
+    parser.add_argument('--sample_ids', '-s', type=str, help='Sample ID txt file with current and new names',
+                        required=True)
     parser.add_argument('--input_fasta', '-i', type=str, help='Input multi-fasta to convert', required=True)
     parser.add_argument('--output_dir', '-o', type=str, help='output directory for single modified fasta files',
-                    required=True)
+                        required=True)
     parser.add_argument('--category', '-c', type=str, help='Renaming category: Nextstrain or Gisaid',
-                    required=True)
+                        required=True)
 
     args = parser.parse_args()
 
@@ -38,12 +39,14 @@ def main():
         data_dict = pd.Series(metadata.strain.values, index=metadata.WGS_Id).to_dict()
     elif args.category == "Gisaid":
         data_dict = pd.Series(metadata.covv_virus_name.values, index=metadata.WGS_Id).to_dict()
+    else:
+        data_dict = None
+        raise TypeError("The renaming dictionary could not be created:\n {}".format(data_dict))
 
     fasta_to_open = open(args.input_fasta)
 
-# assert len(fasta_to_open.readlines()) == len(data_dict)
-
-    fasta_name_new = str(os.path.basename(fasta_to_open.name)).strip('.fa') + "_renamed_{}.fa".format(str(args.category))
+    fasta_name_new = str(os.path.basename(str(fasta_to_open.name))).split('.fa')[0] + "_renamed_{}.fa".format(
+        str(args.category))
 
     output_fasta = os.path.join(args.output_dir, fasta_name_new)
 
@@ -72,4 +75,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

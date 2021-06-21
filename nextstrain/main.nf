@@ -10,11 +10,11 @@ include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets } 
 workflow {
 	
 	if (params.mode == "refine_iterations") {
-		nextstrain_augur_refine_clock_iterations(1..10, 1..10)
+		nextstrain_augur_refine_clock_iterations()
 
 	}
 	if (params.mode == "random_subsets") {
-		nextstrain_random_subsets(1..12)
+		nextstrain_random_subsets()
 
 }
 
