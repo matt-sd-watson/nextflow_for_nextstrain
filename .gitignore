@@ -4,3 +4,5 @@
 .hextflow/*
 .nextflow.*
 .Rhistory*
+.csv
+.csv*
