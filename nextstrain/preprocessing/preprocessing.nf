@@ -25,38 +25,59 @@ process create_subset {
 	
 }
 
+process create_subset_by_lineage {
+
+	publishDir path: "${params.output_dir}/${lineage}/", mode: "copy"
+
+	input: 
+	val lineage	
+
+	output:
+	path "${lineage}.csv"
+
+	script: 
+	"""
+	Rscript $binDir/make_nextstrain_subsets_by_lineage.R --input_lineage ${params.lineage_report} --lineage_id ${lineage} --input_metadata ${params.metadata}
+	"""
+		
+
+}
+
+
+
+
 
 process create_fasta {
 
-	publishDir path: "${params.output_dir}/${metadata_sheet.simpleName}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${metadata_sheet.baseName}/", mode: "copy"
 
 	input: 
 	path metadata_sheet
 
 	output: 
-	file "${metadata_sheet.simpleName}.fa"
+	file "${metadata_sheet.baseName}.fa"
 
 	script: 
 	"""
-	cut -d, -f1 ${metadata_sheet} > names_${metadata_sheet.simpleName}.txt
-	$binDir/./faSomeRecords /NetDrive/Projects/COVID-19/Other/master_fasta/complete* names_${metadata_sheet.simpleName}.txt ${metadata_sheet.simpleName}.fa && rm names_${metadata_sheet.simpleName}.txt
+	cut -d, -f1 ${metadata_sheet} > names_${metadata_sheet.baseName}.txt
+	$binDir/./faSomeRecords ${params.master_fasta} names_${metadata_sheet.baseName}.txt ${metadata_sheet.baseName}.fa && rm names_${metadata_sheet.baseName}.txt
 	"""
 }
 
 
 process rename_headers {
 
-	publishDir path: "${params.output_dir}/${fasta.simpleName}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${fasta.baseName}/", mode: "copy"
 
 	input: 
 	file fasta
 
 	output: 
-	file "${fasta.simpleName}_renamed_Nextstrain.fa"
+	file "${fasta.baseName}_renamed_Nextstrain.fa"
 
 	script: 
 	"""
-	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${params.output_dir}/${fasta.simpleName}/${fasta.simpleName}.csv -o . -c Nextstrain
+	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${params.output_dir}/${fasta.baseName}/${fasta.baseName}.csv -o . -c Nextstrain
 	"""
 }
 

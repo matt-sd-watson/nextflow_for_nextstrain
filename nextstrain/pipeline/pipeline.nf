@@ -31,7 +31,7 @@ process nextstrain_align {
 	file "${split_name_align}_aln.fasta"
 
 	script:
-	split_name_align = filtered_fasta.simpleName.split('_filtered')[0]
+	split_name_align = filtered_fasta.baseName.split('_filtered')[0]
 	"""
 	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${split_name_align}_aln.fasta --nthreads ${params.threads} --fill-gaps
 	"""
@@ -48,7 +48,7 @@ process nextstrain_tree {
 	file "${split_name_tree}_tree.nwk"
 
 	script:
-	split_name_tree = alignment.simpleName.split('_aln')[0]
+	split_name_tree = alignment.baseName.split('_aln')[0]
 	"""
 	augur tree --alignment ${alignment} --output ${split_name_tree}_tree.nwk --nthreads ${params.threads}
 	"""	
@@ -66,7 +66,7 @@ process nextstrain_tree_refine {
 	file "${split_name_tree}_tree_refined.nwk"
 
 	script:
-	split_name_tree = tree.simpleName.split('_tree')[0]
+	split_name_tree = tree.baseName.split('_tree')[0]
 	"""
 	augur refine \
   	--tree ${tree} \
@@ -96,7 +96,7 @@ process nextstrain_tree_refine_clock_iterations {
 	file "${split_name_tree}_tree_refined_${clock}.nwk"
 
 	script:
-	split_name_tree = tree.simpleName.split('_tree')[0]
+	split_name_tree = tree.baseName.split('_tree')[0]
 	"""
 	augur refine \
   	--tree ${tree} \
@@ -125,7 +125,7 @@ process nextstrain_traits {
 	file "${split_name_tree}_traits.json"
 
 	script:
-	split_name_tree = refined_tree.simpleName.split('_tree')[0]
+	split_name_tree = refined_tree.baseName.split('_tree')[0]
 	"""
 	augur traits --tree ${refined_tree} --metadata ${params.output_dir}/${split_name_tree}/${split_name_tree}.csv \
 	--output-node-data ${split_name_tree}_traits.json --columns Health.Region
@@ -145,7 +145,7 @@ process nextstrain_ancestral {
 	file "${split_name_tree}_nt_muts.json"
 
 	script:
-	split_name_tree = refined_tree.simpleName.split('_tree')[0]
+	split_name_tree = refined_tree.baseName.split('_tree')[0]
 	"""
 	augur ancestral   --tree ${refined_tree}   --alignment ${params.output_dir}/${split_name_tree}/${split_name_tree}_aln.fasta \
 	--output-node-data ${split_name_tree}_nt_muts.json   --inference joint
@@ -164,7 +164,7 @@ process nextstrain_translate {
 	file "${split_name_nuc}_aa_muts.json"
 
 	script:
-	split_name_nuc = nucleotide_json.simpleName.split('_nt_muts')[0]
+	split_name_nuc = nucleotide_json.baseName.split('_nt_muts')[0]
 	"""
 	augur translate --tree ${params.output_dir}/${split_name_nuc}/${split_name_nuc}_tree_refined.nwk \
 	--ancestral-sequences ${nucleotide_json} \
@@ -184,7 +184,7 @@ process nextstrain_clades {
 	file "${split_name_aa}_clades.json"
 
 	script:
-	split_name_aa = amino_acid_json.simpleName.split('_aa_muts')[0]
+	split_name_aa = amino_acid_json.baseName.split('_aa_muts')[0]
 	"""
 	augur clades --tree ${params.output_dir}/${split_name_aa}/${split_name_aa}_tree_refined.nwk \
 	--mutations ${params.output_dir}/${split_name_aa}/${split_name_aa}_nt_muts.json ${amino_acid_json} \
@@ -204,7 +204,7 @@ process nextstrain_export {
 	file "${split_name_clades}_ncov.json"
 
 	script:
-	split_name_clades = clades.simpleName.split('_clades')[0]
+	split_name_clades = clades.baseName.split('_clades')[0]
 	"""
 	mkdir -p ${params.output_dir}/all/
 	augur export v2   --tree ${params.output_dir}/${split_name_clades}/${split_name_clades}_tree_refined.nwk \
