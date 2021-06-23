@@ -39,6 +39,8 @@ process nextstrain_align {
 
 process nextstrain_tree {
 
+	label 'med_mem'
+
 	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
 	input: 
@@ -56,6 +58,8 @@ process nextstrain_tree {
 }
 
 process nextstrain_tree_refine {
+
+	label 'med_mem'
 
 	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 
@@ -85,6 +89,8 @@ process nextstrain_tree_refine {
 }
 
 process nextstrain_tree_refine_clock_iterations {
+
+	label 'med_mem'
 
 	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
 

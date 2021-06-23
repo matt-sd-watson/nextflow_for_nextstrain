@@ -18,7 +18,7 @@ process manipulate_json {
 	file "${original_json.baseName}_edited.json"
 
 	script: 
-	json_name = 
+
 	"""
 	python $binDir/manipulate_ncov_json.py -i ${original_json} --o ${original_json.baseName}_edited.json
 	"""
