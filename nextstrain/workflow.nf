@@ -14,23 +14,22 @@ include { manipulate_json } from "./postprocessing/postprocessing.nf"
 workflow nextstrain_augur_refine_clock_iterations {
 
 	main: 
+	   iterations = Channel.of(params.start_iteration..params.stop_iteration)
 	   metadata_file = params.metadata
-	   iterations = Channel.of(1..params.iteration)
-	   clocks = Channel.of(1..params.clock)
            create_subset(metadata_file, iterations)
            create_fasta(create_subset.out)
 	   rename_headers(create_fasta.out)
 	   nextstrain_filter(rename_headers.out)
 	   nextstrain_align(nextstrain_filter.out)
-	   nextstrain_tree(nextstrain_align.out)
-	   nextstrain_tree_refine_clock_iterations(nextstrain_tree.out, clocks)
+	   emit: 
+	      nextstrain_align.out
 
 }
 
 workflow nextstrain_random_subsets {
 
 	main:
-	   iterations = Channel.of(1..params.iteration)
+	   iterations = Channel.of(params.start_iteration..params.stop_iteration)
 	   metadata_file = params.metadata 
            create_subset(metadata_file, iterations)
            create_fasta(create_subset.out)
