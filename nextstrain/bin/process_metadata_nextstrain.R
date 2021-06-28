@@ -47,18 +47,18 @@ pho_data <- pho_data[pho_data$GISAID.Clade != "",]
 # split into samples that have outbreak ID and not, retain all samples without outbreak designation
 # re-merge the outbreak and non-outbreak samples before random subsetting
 
-gisaid_no_outbreak <- pho_data[pho_data$OB_Id == "",]
-gisaid_outbreak <- pho_data[pho_data$OB_Id != "",]
+# gisaid_no_outbreak <- pho_data[pho_data$OB_Id == "",]
+# gisaid_outbreak <- pho_data[pho_data$OB_Id != "",]
+# 
+# gisaid_filter_outbreak <- gisaid_outbreak[with(gisaid_outbreak, do.call(order, list(OB_Id))), ]
+# # specify the fields to group by in list
+# # specify how many samples per grouping to retain with head
+# gisaid_filter_outbreak <- do.call(rbind, by(gisaid_filter_outbreak, list(gisaid_filter_outbreak$OB_Id), 
+#                                             FUN=function(x) head(x, 2)))
+# 
+# final_gisaid <- rbind(gisaid_no_outbreak, gisaid_filter_outbreak)
 
-gisaid_filter_outbreak <- gisaid_outbreak[with(gisaid_outbreak, do.call(order, list(OB_Id))), ]
-# specify the fields to group by in list
-# specify how many samples per grouping to retain with head
-gisaid_filter_outbreak <- do.call(rbind, by(gisaid_filter_outbreak, list(gisaid_filter_outbreak$OB_Id), 
-                                            FUN=function(x) head(x, 2)))
-
-final_gisaid <- rbind(gisaid_no_outbreak, gisaid_filter_outbreak)
-
-final_subset <- sample_n(final_gisaid, args$subset_number)
+final_subset <- sample_n(pho_data, args$subset_number)
 setnames(final_subset, "PHO.WGS.Id", "strain")
 setnames(final_subset, "Date", "date")
 
