@@ -9,6 +9,22 @@ include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets; n
 include { nextstrain_tree; nextstrain_tree_refine; nextstrain_tree_refine_clock_iterations } from "./pipeline/pipeline.nf"
 
 
+// Check input path parameters to see if the files exist if they have been specified
+// https://github.com/nf-core/cutandrun/blob/86cb2cc89da77957dc575786d9d7277148109a91/workflows/cutandrun.nf#L13
+
+checkPathParamList = [
+    params.alignment_ref,
+    params.metadata,
+    params.colortsv,
+    params.config,
+    params.latlong,
+    params.lineage_report,
+    params.master_fasta
+]
+
+for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+
+
 workflow {
 	
 	main:
