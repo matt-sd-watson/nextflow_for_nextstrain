@@ -1,5 +1,0 @@
-export SINGULARITY_BIND="/NetDrive/Projects/COVID-19/Other/master_fasta"
-singularity shell nextflow_nextstrain.sif
-
-
-
