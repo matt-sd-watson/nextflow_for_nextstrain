@@ -14,19 +14,17 @@ description="Docker image containing all requirements for running Nextstrain and
     exec /opt/conda/envs/$(head -n 1 environment.yml | cut -f 2 -d ' ')/bin/"$@"
 
 Bootstrap: docker
-From: debian:buster-slim
+From: ubuntu:21.04
 Stage: app
 
 %post
+export DEBIAN_FRONTEND=noninteractive
 apt-get update && \
 apt-get install -y git procps && apt install -y r-base && \
 apt install -f -y r-cran-dplyr && apt install -f -y r-cran-data.table && \
-apt update
+apt update && apt install -f -y r-cran-argparse
 %files from condabuild
   /opt/conda/envs/nf_nextstrain
 %environment
 export PATH=/opt/conda/envs/nf_nextstrain/bin:$PATH
-
-
-
 
