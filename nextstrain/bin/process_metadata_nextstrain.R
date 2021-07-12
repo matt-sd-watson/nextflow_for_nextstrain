@@ -1,6 +1,5 @@
 library(data.table)
 library(dplyr)
-library(plyr)
 library(argparse)
 
 parser <- ArgumentParser(description='Generate a random subset of metadata for Nextstrain')
