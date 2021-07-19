@@ -13,7 +13,7 @@ process nextstrain_filter {
 	file "${split_name}_filtered.fasta"
 
 	script: 
-	split_name = renamed_fasta.name.split('_renamed')[0]
+	split_name = renamed_fasta.name.split('_')[0]
 	"""
 	augur filter --sequences ${renamed_fasta} --metadata ${params.output_dir}/${split_name}/${split_name}.csv --output ${split_name}_filtered.fasta --min-date 2020
 	"""
@@ -31,7 +31,7 @@ process nextstrain_align {
 	file "${split_name_align}_aln.fasta"
 
 	script:
-	split_name_align = filtered_fasta.baseName.split('_filtered')[0]
+	split_name_align = filtered_fasta.baseName.split('_')[0]
 	"""
 	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${split_name_align}_aln.fasta --nthreads ${params.threads} --fill-gaps
 	"""
@@ -50,7 +50,7 @@ process nextstrain_tree {
 	file "${split_name_tree}_tree.nwk"
 
 	script:
-	split_name_tree = alignment.baseName.split('_aln')[0]
+	split_name_tree = alignment.baseName.split('_')[0]
 	"""
 	augur tree --alignment ${alignment} --output ${split_name_tree}_tree.nwk --nthreads ${params.threads}
 	"""	
@@ -70,7 +70,7 @@ process nextstrain_tree_refine {
 	file "${split_name_tree}_tree_refined.nwk"
 
 	script:
-	split_name_tree = tree.baseName.split('_tree')[0]
+	split_name_tree = tree.baseName.split('_')[0]
 	"""
 	augur refine \
   	--tree ${tree} \
@@ -102,7 +102,7 @@ process nextstrain_tree_refine_clock_iterations {
 	file "${split_name_tree}_tree_refined_${clock}.nwk"
 
 	script:
-	split_name_tree = tree.baseName.split('_tree')[0]
+	split_name_tree = tree.baseName.split('_')[0]
 	"""
 	augur refine \
   	--tree ${tree} \

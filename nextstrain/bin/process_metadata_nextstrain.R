@@ -1,22 +1,24 @@
 library(data.table)
 library(dplyr)
-library(argparse)
+library(optparse)
 
-parser <- ArgumentParser(description='Generate a random subset of metadata for Nextstrain')
-parser$add_argument('--input_metadata', type = "character", 
-                    help='path to metadata sheet')
-parser$add_argument('--output_file', type = "character", 
-                    help='output file for the sub-sampled metadata sheet')
-parser$add_argument('--subset_number', type = "integer", 
-                    help='Number of PHO sequences for the Nextstrain build')
-parser$add_argument('--category', type = "character", 
-                    help='the character specifying theunique subset for the metadata sheet')
+option_list = list(
+  make_option(c("-i", "--input_metadata"), type="character", default=NULL, 
+              help="path to metadata sheet", metavar="character"),
+  make_option(c("-o", "--output_file"), type="character", default=NULL, 
+              help="output file for the sub-sampled metadata sheet", metavar="character"),
+  make_option(c("-s", "--subset_number"), type="integer", default=NULL, 
+             help="Number of PHO sequences for the Nextstrain build", metavar="integer"),
+  make_option(c("-c", "--category"), type="character", default=NULL, 
+              help="the character specifying the unique subset for the metadata sheet", metavar="character")
+); 
 
-args <- parser$parse_args()
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser);
 
 # read in metadata from the qc90 list
 pho_data <- read.table(
-  args$input_metadata,
+  opt$input_metadata,
   header = T,
   sep = ',',
   fill = TRUE,
@@ -28,16 +30,6 @@ pho_data <- pho_data[pho_data$Date != "--",]
 pho_data <- pho_data[pho_data$Pango.Lineage != "None",]
 
 pho_data <- pho_data[order(as.Date(pho_data$Date, format = "%Y-%m-%d")),]
-
-samples_ignore <- c("PHLON21-SARS08947", "PHLON21-SARS08968", "PHLON21-SARS08971",
-                    "PHLON21-SARS08946", "PHLON21-SARS12146", "PHLON21-SARS01262",
-                    "PHLON21-SARS01274", "PHLON21-SARS01288", "PHLON21-SARS01291",
-                    "PHLON21-SARS08025", "PHLON21-SARS07900", "PHLON21-SARS07829",
-                    "PHLON21-SARS07829", "PHLON21-SARS07811", "PHLON21-SARS01324",
-                    "PHLON21-SARS07827", "PHLON21-SARS13134", "PHLON20-SARS03285",
-                    "PHLON20-SARS03544")
-
-pho_data <- pho_data[!pho_data$WGS_Id %in% samples_ignore,]
 
 pho_data <- pho_data[pho_data$GISAID.Clade != "",]
 
@@ -56,11 +48,11 @@ pho_data <- pho_data[pho_data$GISAID.Clade != "",]
 # 
 # final_gisaid <- rbind(gisaid_no_outbreak, gisaid_filter_outbreak)
 
-final_subset <- sample_n(pho_data, args$subset_number)
+final_subset <- sample_n(pho_data, opt$subset_number)
 setnames(final_subset, "PHO.WGS.Id", "strain")
 setnames(final_subset, "Date", "date")
 
-output_file <- paste(args$category, ".csv", sep="") # replace with desired output directory
+output_file <- paste(opt$category, ".csv", sep="") # replace with desired output directory
 write.csv(final_subset,
           output_file,
           row.names = F,
