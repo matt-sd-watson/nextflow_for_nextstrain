@@ -2,38 +2,39 @@
 
 nextflow.enable.dsl=2
 
+def splitUnderscore (string) { string.split('_')[0] }
+
 process nextstrain_filter {
 
 
-	publishDir path: "${params.output_dir}/${split_name}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(renamed_fasta.baseName)}/", mode: "copy"
 	input: 
 	file renamed_fasta
 
 	output: 
-	file "${split_name}_filtered.fasta"
+	file "${splitUnderscore(renamed_fasta.baseName)}_filtered.fasta"
 
 	script: 
-	split_name = renamed_fasta.name.split('_')[0]
 	"""
-	augur filter --sequences ${renamed_fasta} --metadata ${params.output_dir}/${split_name}/${split_name}.csv --output ${split_name}_filtered.fasta --min-date 2020
+	augur filter --sequences ${renamed_fasta} --metadata ${params.output_dir}/${splitUnderscore(renamed_fasta.baseName)}/${splitUnderscore(renamed_fasta.baseName)}.csv \
+        --output ${splitUnderscore(renamed_fasta.baseName)}_filtered.fasta --min-date 2020
 	"""
 }
 
 
 process nextstrain_align {
 
-	publishDir path: "${params.output_dir}/${split_name_align}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(filtered_fasta.baseName)}/", mode: "copy"
 
 	input: 
 	file filtered_fasta
 	
 	output: 
-	file "${split_name_align}_aln.fasta"
+	file "${splitUnderscore(filtered_fasta.baseName)}_aln.fasta"
 
 	script:
-	split_name_align = filtered_fasta.baseName.split('_')[0]
 	"""
-	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${split_name_align}_aln.fasta --nthreads ${params.threads} --fill-gaps
+	augur align --sequences ${filtered_fasta} --reference-sequence ${params.alignment_ref} --output ${splitUnderscore(filtered_fasta.baseName)}_aln.fasta --nthreads ${params.threads} --fill-gaps
 	"""
 }
 
@@ -41,18 +42,17 @@ process nextstrain_tree {
 
 	label 'med_mem'
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(alignment.baseName)}/", mode: "copy"
 
 	input: 
 	file alignment
 	
 	output: 
-	file "${split_name_tree}_tree.nwk"
+	file "${splitUnderscore(alignment.baseName)}_tree.nwk"
 
 	script:
-	split_name_tree = alignment.baseName.split('_')[0]
 	"""
-	augur tree --alignment ${alignment} --output ${split_name_tree}_tree.nwk --nthreads ${params.threads}
+	augur tree --alignment ${alignment} --output ${splitUnderscore(alignment.baseName)}_tree.nwk --nthreads ${params.threads}
 	"""	
 
 }
@@ -61,23 +61,22 @@ process nextstrain_tree_refine {
 
 	label 'med_mem'
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(tree.baseName)}/", mode: "copy"
 
 	input: 
 	file tree
 	
 	output: 
-	file "${split_name_tree}_tree_refined.nwk"
+	file "${splitUnderscore(tree.baseName)}_tree_refined.nwk"
 
 	script:
-	split_name_tree = tree.baseName.split('_')[0]
 	"""
 	augur refine \
   	--tree ${tree} \
-  	--alignment ${params.output_dir}/${split_name_tree}/${split_name_tree}_aln.fasta \
-  	--metadata ${params.output_dir}/${split_name_tree}/${split_name_tree}.csv \
-  	--output-tree ${split_name_tree}_tree_refined.nwk \
-  	--output-node-data ${params.output_dir}/${split_name_tree}/${split_name_tree}_branch_lengths.json \
+  	--alignment ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}_aln.fasta \
+  	--metadata ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}.csv \
+  	--output-tree ${splitUnderscore(tree.baseName)}_tree_refined.nwk \
+  	--output-node-data ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}_branch_lengths.json \
   	--timetree \
   	--coalescent opt \
   	--date-confidence \
@@ -92,49 +91,47 @@ process nextstrain_tree_refine_clock_iterations {
 
 	label 'med_mem'
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(tree.baseName)}/", mode: "copy"
 
 	input: 
 	file tree
 	each clock
 	
 	output: 
-	file "${split_name_tree}_tree_refined_${clock}.nwk"
+	file "${splitUnderscore(tree.baseName)}_tree_refined_${clock}.nwk"
 
 	script:
-	split_name_tree = tree.baseName.split('_')[0]
 	"""
 	augur refine \
   	--tree ${tree} \
-  	--alignment ${params.output_dir}/${split_name_tree}/${split_name_tree}_aln.fasta \
-  	--metadata ${params.output_dir}/${split_name_tree}/${split_name_tree}.csv \
-  	--output-tree ${split_name_tree}_tree_refined_${clock}.nwk \
-  	--output-node-data ${params.output_dir}/${split_name_tree}/${split_name_tree}_branch_lengths_${clock}.json \
+  	--alignment ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}_aln.fasta \
+  	--metadata ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}.csv \
+  	--output-tree ${splitUnderscore(tree.baseName)}_tree_refined_${clock}.nwk \
+  	--output-node-data ${params.output_dir}/${splitUnderscore(tree.baseName)}/${splitUnderscore(tree.baseName)}_branch_lengths_${clock}.json \
   	--timetree \
   	--coalescent opt \
   	--date-confidence \
   	--date-inference marginal \
   	--clock-filter-iqd ${clock} \
-  	--keep-root > ${params.output_dir}/${split_name_tree}/augur_refine_${split_name_tree}_clock_${clock}.txt
+  	--keep-root > ${params.output_dir}/${splitUnderscore(tree.baseName)}/augur_refine_${splitUnderscore(tree.baseName)}_clock_${clock}.txt
 	"""	
 
 }
 
 process nextstrain_traits {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(refined_tree.baseName)}/", mode: "copy"
 
 	input: 
 	file refined_tree
 
 	output: 
-	file "${split_name_tree}_traits.json"
+	file "${splitUnderscore(refined_tree.baseName)}_traits.json"
 
 	script:
-	split_name_tree = refined_tree.baseName.split('_tree')[0]
 	"""
-	augur traits --tree ${refined_tree} --metadata ${params.output_dir}/${split_name_tree}/${split_name_tree}.csv \
-	--output-node-data ${split_name_tree}_traits.json --columns Health.Region
+	augur traits --tree ${refined_tree} --metadata ${params.output_dir}/${splitUnderscore(refined_tree.baseName)}/${splitUnderscore(refined_tree.baseName)}.csv \
+	--output-node-data ${splitUnderscore(refined_tree.baseName)}_traits.json --columns Health.Region
 	"""
 	
 
@@ -142,59 +139,56 @@ process nextstrain_traits {
 
 process nextstrain_ancestral {
 
-	publishDir path: "${params.output_dir}/${split_name_tree}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(refined_tree.baseName)}/", mode: "copy"
 
 	input: 
 	file refined_tree
 
 	output: 
-	file "${split_name_tree}_nt_muts.json"
+	file "${splitUnderscore(refined_tree.baseName)}_nt_muts.json"
 
 	script:
-	split_name_tree = refined_tree.baseName.split('_tree')[0]
 	"""
-	augur ancestral   --tree ${refined_tree}   --alignment ${params.output_dir}/${split_name_tree}/${split_name_tree}_aln.fasta \
-	--output-node-data ${split_name_tree}_nt_muts.json   --inference joint
+	augur ancestral   --tree ${refined_tree}   --alignment ${params.output_dir}/${splitUnderscore(refined_tree.baseName)}/${splitUnderscore(refined_tree.baseName)}_aln.fasta \
+	--output-node-data ${splitUnderscore(refined_tree.baseName)}_nt_muts.json   --inference joint
 	"""
 
 }
 
 process nextstrain_translate {
 
-	publishDir path: "${params.output_dir}/${split_name_nuc}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(nucleotide_json.baseName)}/", mode: "copy"
 
 	input: 
 	file nucleotide_json
 
 	output: 
-	file "${split_name_nuc}_aa_muts.json"
+	file "${splitUnderscore(nucleotide_json.baseName)}_aa_muts.json"
 
 	script:
-	split_name_nuc = nucleotide_json.baseName.split('_nt_muts')[0]
 	"""
-	augur translate --tree ${params.output_dir}/${split_name_nuc}/${split_name_nuc}_tree_refined.nwk \
+	augur translate --tree ${params.output_dir}/${splitUnderscore(nucleotide_json.baseName)}/${splitUnderscore(nucleotide_json.baseName)}_tree_refined.nwk \
 	--ancestral-sequences ${nucleotide_json} \
   	--reference-sequence ${params.alignment_ref} \
-	--output-node-data ${split_name_nuc}_aa_muts.json
+	--output-node-data ${splitUnderscore(nucleotide_json.baseName)}_aa_muts.json
 	"""
 }
 
 process nextstrain_clades {
 
-	publishDir path: "${params.output_dir}/${split_name_aa}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${splitUnderscore(amino_acid_json.baseName)}/", mode: "copy"
 
 	input: 
 	file amino_acid_json
 
 	output: 
-	file "${split_name_aa}_clades.json"
+	file "${splitUnderscore(amino_acid_json.baseName)}_clades.json"
 
 	script:
-	split_name_aa = amino_acid_json.baseName.split('_aa_muts')[0]
 	"""
-	augur clades --tree ${params.output_dir}/${split_name_aa}/${split_name_aa}_tree_refined.nwk \
-	--mutations ${params.output_dir}/${split_name_aa}/${split_name_aa}_nt_muts.json ${amino_acid_json} \
-	--clades ${params.clades} --output-node-data ${split_name_aa}_clades.json
+	augur clades --tree ${params.output_dir}/${splitUnderscore(amino_acid_json.baseName)}/${splitUnderscore(amino_acid_json.baseName)}_tree_refined.nwk \
+	--mutations ${params.output_dir}/${splitUnderscore(amino_acid_json.baseName)}/${splitUnderscore(amino_acid_json.baseName)}_nt_muts.json ${amino_acid_json} \
+	--clades ${params.clades} --output-node-data ${splitUnderscore(amino_acid_json.baseName)}_clades.json
 	"""
 
 }
@@ -207,22 +201,21 @@ process nextstrain_export {
 	file clades
 
 	output: 
-	file "${split_name_clades}_ncov.json"
+	file "${splitUnderscore(clades.baseName)}_ncov.json"
 
 	script:
-	split_name_clades = clades.baseName.split('_clades')[0]
 	"""
 	mkdir -p ${params.output_dir}/all/
-	augur export v2   --tree ${params.output_dir}/${split_name_clades}/${split_name_clades}_tree_refined.nwk \
-	--metadata ${params.output_dir}/${split_name_clades}/${split_name_clades}.csv \
-	--node-data ${params.output_dir}/${split_name_clades}/${split_name_clades}_branch_lengths.json \
-                    ${params.output_dir}/${split_name_clades}/${split_name_clades}_traits.json \
-		    ${params.output_dir}/${split_name_clades}/${split_name_clades}_nt_muts.json \
-		    ${params.output_dir}/${split_name_clades}/${split_name_clades}_aa_muts.json \
-		    ${params.output_dir}/${split_name_clades}/${split_name_clades}_clades.json \
+	augur export v2   --tree ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_tree_refined.nwk \
+	--metadata ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}.csv \
+	--node-data ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_branch_lengths.json \
+                    ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_traits.json \
+		    ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_nt_muts.json \
+		    ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_aa_muts.json \
+		    ${params.output_dir}/${splitUnderscore(clades.baseName)}/${splitUnderscore(clades.baseName)}_clades.json \
 	--colors ${params.colortsv} \
 	--auspice-config ${params.config} \
-   	--output ${split_name_clades}_ncov.json \
+   	--output ${splitUnderscore(clades.baseName)}_ncov.json \
 	--lat-longs ${params.latlong}
 	"""
 
