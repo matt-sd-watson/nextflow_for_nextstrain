@@ -82,7 +82,7 @@ process nextstrain_tree_refine {
   	--date-confidence \
   	--date-inference marginal \
   	--clock-filter-iqd ${params.clockfilteriqd} \
-  	--keep-root
+  	--keep-root > ${params.output_dir}/${splitUnderscore(tree.baseName)}/augur_refine_${splitUnderscore(tree.baseName)}_clock_${params.clockfilteriqd}.txt
 	"""	
 
 }
