@@ -8,12 +8,13 @@ include { create_subset; create_subset_by_lineage; create_fasta; rename_headers 
 
 include { nextstrain_filter; nextstrain_align; nextstrain_tree; nextstrain_tree_refine; nextstrain_tree_refine_clock_iterations; nextstrain_traits; nextstrain_ancestral; nextstrain_translate; nextstrain_clades; nextstrain_export } from "./pipeline/pipeline.nf"
 
-include { manipulate_json } from "./postprocessing/postprocessing.nf"
+include { manipulate_json; clean_directories } from "./postprocessing/postprocessing.nf"
 
 
 workflow nextstrain_augur_refine_clock_iterations {
 
 	main: 
+	   clocks = Channel.of(1..params.clock)
 	   iterations = Channel.of(params.start_iteration..params.stop_iteration)
 	   metadata_file = params.metadata
            create_subset(metadata_file, iterations)
@@ -21,9 +22,12 @@ workflow nextstrain_augur_refine_clock_iterations {
 	   rename_headers(create_fasta.out)
 	   nextstrain_filter(rename_headers.out)
 	   nextstrain_align(nextstrain_filter.out)
-	   emit: 
-	      nextstrain_align.out
+	   nextstrain_tree(nextstrain_align.out)
+           nextstrain_tree_refine_clock_iterations(nextstrain_tree.out, clocks)
 
+	emit: 
+	   tree = nextstrain_tree_refine_clock_iterations.out.refined_tree
+	   out = nextstrain_tree_refine_clock_iterations.out.out
 }
 
 workflow nextstrain_random_subsets {
@@ -44,6 +48,9 @@ workflow nextstrain_random_subsets {
 	   nextstrain_clades(nextstrain_translate.out)
 	   nextstrain_export(nextstrain_clades.out)
 	   manipulate_json(nextstrain_export.out)
+
+	emit: 
+	   manipulate_json.out
 	   
 
 }
@@ -66,5 +73,20 @@ workflow nextstrain_by_lineage {
 	   nextstrain_export(nextstrain_clades.out)
 	   manipulate_json(nextstrain_export.out)
 
+	emit: 
+	   manipulate_json.out
+
 
 }
+
+
+workflow directory_cleanup {
+	
+	take: trigger_file
+
+	main: 
+	trigger = Channel.of(trigger_file).last()
+	clean_directories(trigger)
+
+}
+

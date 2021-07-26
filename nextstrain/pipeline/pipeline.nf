@@ -82,6 +82,7 @@ process nextstrain_tree_refine {
   	--date-confidence \
   	--date-inference marginal \
   	--clock-filter-iqd ${params.clockfilteriqd} \
+	--seed ${params.refineseed} \
   	--keep-root > ${params.output_dir}/${splitUnderscore(tree.baseName)}/augur_refine_${splitUnderscore(tree.baseName)}_clock_${params.clockfilteriqd}.txt
 	"""	
 
@@ -98,7 +99,8 @@ process nextstrain_tree_refine_clock_iterations {
 	each clock
 	
 	output: 
-	file "${splitUnderscore(tree.baseName)}_tree_refined_${clock}.nwk"
+	path "${splitUnderscore(tree.baseName)}_tree_refined_${clock}.nwk", emit: refined_tree
+	stdout emit: out
 
 	script:
 	"""
@@ -113,6 +115,7 @@ process nextstrain_tree_refine_clock_iterations {
   	--date-confidence \
   	--date-inference marginal \
   	--clock-filter-iqd ${clock} \
+	--seed ${params.refineseed} \
   	--keep-root > ${params.output_dir}/${splitUnderscore(tree.baseName)}/augur_refine_${splitUnderscore(tree.baseName)}_clock_${clock}.txt
 	"""	
 

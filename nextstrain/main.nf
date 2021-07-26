@@ -4,9 +4,12 @@ nextflow.enable.dsl=2
 
 import java.nio.file.Paths
 
-include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets; nextstrain_by_lineage  } from "./workflow.nf"
+include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets; nextstrain_by_lineage; directory_cleanup  } from "./workflow.nf"
 
-include { nextstrain_tree; nextstrain_tree_refine; nextstrain_tree_refine_clock_iterations } from "./pipeline/pipeline.nf"
+// re-write workflows in the separaeete file so that all that is finally imported are the workflows themselves and not individual processes
+// include { nextstrain_tree; nextstrain_tree_refine; nextstrain_tree_refine_clock_iterations } from "./pipeline/pipeline.nf"
+
+include { clean_directories } from "./postprocessing/postprocessing.nf"
 
 
 // Check input path parameters to see if the files exist if they have been specified
@@ -28,13 +31,13 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 workflow {
 	
 	main:
-	    clocks = Channel.of(1..params.clock)
-	
+	    
 	if (params.mode == "refine_iterations") {
 		
 		   nextstrain_augur_refine_clock_iterations()
-		   nextstrain_tree(nextstrain_augur_refine_clock_iterations.out)
-		   nextstrain_tree_refine_clock_iterations(nextstrain_tree.out, clocks)		
+		   trigger_file = nextstrain_augur_refine_clock_iterations.out.tree
+		   directory_cleanup(trigger_file)
+  
 
 	}
 	if (params.mode == "random_subsets") {

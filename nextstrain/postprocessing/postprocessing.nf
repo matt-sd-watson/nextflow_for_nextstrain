@@ -18,11 +18,25 @@ process manipulate_json {
 	file "${original_json.baseName}_edited.json"
 
 	script: 
-
 	"""
 	python $binDir/manipulate_ncov_json.py -i ${original_json} --o ${original_json.baseName}_edited.json
 	"""
 	
 }
+
+// remove the working directory and remove any unecessary files from the nextstrain build
+process clean_directories {
+
+
+	input: 
+	path in
+
+	script: 
+	"""
+	sh $binDir/clean_directories.sh ${workDir} ${params.output_dir}
+	"""
+}
+
+
 
 
