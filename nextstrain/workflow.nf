@@ -27,7 +27,7 @@ workflow nextstrain_augur_refine_clock_iterations {
 
 	emit: 
 	   tree = nextstrain_tree_refine_clock_iterations.out.refined_tree
-	   out = nextstrain_tree_refine_clock_iterations.out.out
+	   dirs = nextstrain_tree_refine_clock_iterations.out.final_directories
 }
 
 workflow nextstrain_random_subsets {
@@ -82,11 +82,13 @@ workflow nextstrain_by_lineage {
 
 workflow directory_cleanup {
 	
-	take: trigger_file
+	take: location_dir
 
 	main: 
-	trigger = Channel.of(trigger_file).last()
-	clean_directories(trigger)
+	clean_directories(location_dir)
 
 }
+
+
+
 

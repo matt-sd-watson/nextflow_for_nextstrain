@@ -29,11 +29,11 @@ process clean_directories {
 
 
 	input: 
-	path in
+	val location
 
 	script: 
 	"""
-	sh $binDir/clean_directories.sh ${workDir} ${params.output_dir}
+	sh $binDir/clean_directories.sh ${location}/ 
 	"""
 }
 

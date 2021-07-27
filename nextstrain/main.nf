@@ -35,9 +35,9 @@ workflow {
 	if (params.mode == "refine_iterations") {
 		
 		   nextstrain_augur_refine_clock_iterations()
-		   trigger_file = nextstrain_augur_refine_clock_iterations.out.tree
-		   directory_cleanup(trigger_file)
-  
+		   if (params.clean_dir == true) {
+		   	directory_cleanup(nextstrain_augur_refine_clock_iterations.out.dirs)
+  			}
 
 	}
 	if (params.mode == "random_subsets") {

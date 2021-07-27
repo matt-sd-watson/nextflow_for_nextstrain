@@ -100,7 +100,7 @@ process nextstrain_tree_refine_clock_iterations {
 	
 	output: 
 	path "${splitUnderscore(tree.baseName)}_tree_refined_${clock}.nwk", emit: refined_tree
-	stdout emit: out
+	val "${params.output_dir}/${splitUnderscore(tree.baseName)}/", emit: final_directories
 
 	script:
 	"""
