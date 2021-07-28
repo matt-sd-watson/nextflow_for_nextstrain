@@ -185,7 +185,8 @@ process nextstrain_clades {
 	file amino_acid_json
 
 	output: 
-	file "${splitUnderscore(amino_acid_json.baseName)}_clades.json"
+	path "${splitUnderscore(amino_acid_json.baseName)}_clades.json"
+	
 
 	script:
 	"""
@@ -204,7 +205,8 @@ process nextstrain_export {
 	file clades
 
 	output: 
-	file "${splitUnderscore(clades.baseName)}_ncov.json"
+	path "${splitUnderscore(clades.baseName)}_ncov.json", emit: final_json
+	val "${params.output_dir}/${splitUnderscore(clades.baseName)}/", emit: final_dirs
 
 	script:
 	"""

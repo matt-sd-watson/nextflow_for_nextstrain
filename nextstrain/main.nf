@@ -42,6 +42,9 @@ workflow {
 	}
 	if (params.mode == "random_subsets") {
 		nextstrain_random_subsets()
+		if (params.clean_dir == true) {
+		   	directory_cleanup(nextstrain_random_subsets.out.dirs)
+  			}
 	}
 
 	if (params.mode == "lineages") {
