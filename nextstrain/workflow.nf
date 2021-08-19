@@ -72,7 +72,7 @@ workflow nextstrain_by_lineage {
 	   nextstrain_translate(nextstrain_ancestral.out)
 	   nextstrain_clades(nextstrain_translate.out)
 	   nextstrain_export(nextstrain_clades.out)
-	   manipulate_json(nextstrain_export.out)
+	   manipulate_json(nextstrain_export.out.final_json)
 
 	emit: 
 	   manipulate_json.out
