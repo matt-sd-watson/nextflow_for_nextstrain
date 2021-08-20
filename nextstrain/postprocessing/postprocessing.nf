@@ -12,14 +12,15 @@ process manipulate_json {
 	publishDir path: "${params.output_dir}/all_edited/", mode: "copy"
 
 	input: 
-	file original_json
+	tuple val(cat_name), path(original_json)
 	
 	output:
-	file "${original_json.baseName}_edited.json"
+	path "${cat_name}_edited.json", emit: edited_json
+	val "${params.output_dir}/${cat_name}/", emit: final_dirs
 
 	script: 
 	"""
-	python $binDir/manipulate_ncov_json.py -i ${original_json} --o ${original_json.baseName}_edited.json
+	python $binDir/manipulate_ncov_json.py -i ${original_json} --o ${cat_name}_edited.json
 	"""
 	
 }

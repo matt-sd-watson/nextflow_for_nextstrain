@@ -49,9 +49,10 @@ workflow {
 
 	if (params.mode == "lineages") {
 		nextstrain_by_lineage()
-
+		if (params.clean_dir == true) {
+		   	directory_cleanup(nextstrain_by_lineage.out.dirs)
+  			}
 	}
-
 }
 
 

@@ -12,15 +12,14 @@ process create_subset {
 	publishDir path: "${params.output_dir}/${category}/", mode: "copy"
 
 	input: 
-	val metadata
 	val category
 	
 	output:
-	path "${category}.csv"
+	tuple val(category), path("${category}.csv"), emit: metadata
 
 	script: 
 	"""
-	Rscript $binDir/process_metadata_nextstrain.R --input_metadata ${metadata} --output_file ${category}.csv --subset_number ${params.subset_number} --category ${category}
+	Rscript $binDir/process_metadata_nextstrain.R --input_metadata ${params.metadata} --output_file ${category}.csv --subset_number ${params.subset_number} --category ${category}
 	"""
 	
 }
@@ -33,7 +32,7 @@ process create_subset_by_lineage {
 	val lineage	
 
 	output:
-	path "${lineage}.csv"
+	tuple val(lineage), path("${lineage}.csv"), emit: lineage
 
 	script: 
 	"""
@@ -44,40 +43,37 @@ process create_subset_by_lineage {
 }
 
 
-
-
-
 process create_fasta {
 
-	publishDir path: "${params.output_dir}/${metadata_sheet.baseName}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${cat_name}/", mode: "copy"
 
 	input: 
-	path metadata_sheet
+	tuple val(cat_name), path(metadata_sheet)
 
 	output: 
-	file "${metadata_sheet.baseName}.fa"
+	tuple val(cat_name), path("${cat_name}.fa"), emit: fasta
 
 	script: 
 	"""
-	cut -d, -f1 ${metadata_sheet} > names_${metadata_sheet.baseName}.txt
-	$binDir/./faSomeRecords ${params.master_fasta} names_${metadata_sheet.baseName}.txt ${metadata_sheet.baseName}.fa && rm names_${metadata_sheet.baseName}.txt
+	cut -d, -f1 ${metadata_sheet} > names_${cat_name}.txt
+	$binDir/./faSomeRecords ${params.master_fasta} names_${cat_name}.txt ${cat_name}.fa && rm names_${cat_name}.txt
 	"""
 }
 
 
 process rename_headers {
 
-	publishDir path: "${params.output_dir}/${fasta.baseName}/", mode: "copy"
+	publishDir path: "${params.output_dir}/${cat_name}/", mode: "copy"
 
 	input: 
-	file fasta
+	tuple val(cat_name), path(metadata), path(fasta)
 
 	output: 
-	file "${fasta.baseName}_renamed_Nextstrain.fa"
+	tuple val(cat_name), path("${cat_name}_renamed_Nextstrain.fa"), emit: renamed
 
 	script: 
 	"""
-	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${params.output_dir}/${fasta.baseName}/${fasta.baseName}.csv -o . -c Nextstrain
+	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${metadata} -o . -c Nextstrain
 	"""
 }
 
