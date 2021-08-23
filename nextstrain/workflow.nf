@@ -102,10 +102,6 @@ workflow nextstrain_by_lineage {
 
 }
 
-workflow test_new_outputs {
-
-	
-}
 
 workflow directory_cleanup {
 	
