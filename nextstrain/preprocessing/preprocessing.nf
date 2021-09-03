@@ -56,7 +56,7 @@ process create_fasta {
 	script: 
 	"""
 	cut -d, -f1 ${metadata_sheet} > names_${cat_name}.txt
-	$binDir/./faSomeRecords ${params.master_fasta} names_${cat_name}.txt ${cat_name}.fa && rm names_${cat_name}.txt
+	fastafurious subset -f ${params.master_fasta} -l names_${cat_name}.txt -o ${cat_name}.fa && rm names_${cat_name}.txt
 	"""
 }
 

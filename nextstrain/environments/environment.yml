@@ -283,4 +283,4 @@ dependencies:
     - netifaces==0.10.9
     - nextstrain-cli==3.0.3
     - s3fs==2021.6.1
-prefix: /home/jpalmer/miniconda3/envs/nf_nextstrain
+    - git+git://github.com/matt-sd-watson/FASTAfurious
