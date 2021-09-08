@@ -25,7 +25,7 @@ process manipulate_json {
 	
 }
 
-// remove the working directory and remove any unecessary files from the nextstrain build
+// remove any unecessary files from generating test statistics
 process clean_directories {
 
 
@@ -34,7 +34,8 @@ process clean_directories {
 
 	script: 
 	"""
-	sh $binDir/clean_directories.sh ${location}/ 
+	find ${location} -type f \( -name "*.fa" -o -name "*.fasta" -o -name "*.json" -o -name "*.nwk" \) -exec rm -rf {} \;
+	rm -r ${params.output_dir}/all_edited/ ${params.output_dir}/all/ ${params.output_dir}/pipeline_info/
 	"""
 }
 
