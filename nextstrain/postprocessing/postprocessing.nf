@@ -20,7 +20,7 @@ process manipulate_json {
 
 	script: 
 	"""
-	python $binDir/manipulate_ncov_json.py -i ${original_json} --o ${cat_name}_edited.json
+	python $binDir/manipulate_ncov_json.py -i ${original_json} -o ${cat_name}_edited.json
 	"""
 	
 }
@@ -34,8 +34,7 @@ process clean_directories {
 
 	script: 
 	"""
-	find ${location} -type f \( -name "*.fa" -o -name "*.fasta" -o -name "*.json" -o -name "*.nwk" \) -exec rm -rf {} \;
-	rm -r ${params.output_dir}/all_edited/ ${params.output_dir}/all/ ${params.output_dir}/pipeline_info/
+	sh $binDir/clean_directories.sh ${location}/ ${params.output_dir}
 	"""
 }
 
