@@ -49,6 +49,7 @@ process create_fasta {
 
 	input: 
 	tuple val(cat_name), path(metadata_sheet)
+	path master_fasta
 
 	output: 
 	tuple val(cat_name), path("${cat_name}.fa"), emit: fasta
@@ -56,7 +57,7 @@ process create_fasta {
 	script: 
 	"""
 	cut -d, -f1 ${metadata_sheet} > names_${cat_name}.txt
-	fastafurious subset -f ${params.master_fasta} -l names_${cat_name}.txt -o ${cat_name}.fa && rm names_${cat_name}.txt
+	fastafurious subset -f ${master_fasta} -l names_${cat_name}.txt -o ${cat_name}.fa && rm names_${cat_name}.txt
 	"""
 }
 
@@ -73,7 +74,7 @@ process rename_headers {
 
 	script: 
 	"""
-	python $binDir/prepare_multifasta_Nextstrain.py -i ${fasta} -s ${metadata} -o . -c Nextstrain
+	fastafurious rename -i ${fasta} -s ${metadata} -o ${cat_name}_renamed_Nextstrain.fa -1 WGS_Id -2 strain
 	"""
 }
 

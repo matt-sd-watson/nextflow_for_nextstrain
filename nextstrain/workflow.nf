@@ -38,7 +38,7 @@ workflow nextstrain_random_subsets {
 	   iterations = Channel.of(params.start_iteration..params.stop_iteration)
 	   metadata_file = params.metadata 
            create_subset(iterations)
-           create_fasta(create_subset.out.metadata)
+           create_fasta(create_subset.out.metadata, params.master_fasta)
 	   meta_with_fasta = create_subset.out.metadata.join(create_fasta.out.fasta)
 	   rename_headers(meta_with_fasta)
 	   meta_with_fasta_filtered = create_subset.out.metadata.join(rename_headers.out.renamed)
@@ -50,6 +50,41 @@ workflow nextstrain_random_subsets {
 	   traits_input = create_subset.out.metadata.join(nextstrain_tree_refine.out.refined)
 	   nextstrain_traits(traits_input)
            ancestral_inputs = nextstrain_align.out.alignment.join(nextstrain_tree_refine.out.refined)
+	   nextstrain_ancestral(ancestral_inputs)
+           translate_inputs = nextstrain_tree_refine.out.refined.join(nextstrain_ancestral.out.ancestral)
+           nextstrain_translate(translate_inputs)
+	   clades_input = translate_inputs.join(nextstrain_translate.out.translation)
+	   nextstrain_clades(clades_input)
+           final_input = refine_inputs.join(clades_input).join(
+           nextstrain_traits.out.traits).join(nextstrain_clades.out.clades).distinct()
+
+           nextstrain_export(final_input)
+           manipulate_json(nextstrain_export.out.export_json)
+
+	emit: 
+	   jsons = manipulate_json.out.edited_json
+	   dirs = manipulate_json.out.final_dirs
+	   
+
+}
+
+workflow nextstrain_random_subsets_no_align {
+
+	main:
+	   iterations = Channel.of(params.start_iteration..params.stop_iteration)
+	   metadata_file = params.metadata 
+           create_subset(iterations)
+           create_fasta(create_subset.out.metadata, params.nextalign)
+	   meta_with_fasta = create_subset.out.metadata.join(create_fasta.out.fasta)
+	   rename_headers(meta_with_fasta)
+	   meta_with_fasta_filtered = create_subset.out.metadata.join(rename_headers.out.renamed)
+	   nextstrain_filter(meta_with_fasta_filtered)
+	   nextstrain_tree(nextstrain_filter.out.filtered)
+           refine_inputs = nextstrain_tree.out.tree.join(create_subset.out.metadata).join(nextstrain_filter.out.filtered)
+           nextstrain_tree_refine(refine_inputs)
+	   traits_input = create_subset.out.metadata.join(nextstrain_tree_refine.out.refined)
+	   nextstrain_traits(traits_input)
+           ancestral_inputs = nextstrain_filter.out.filtered.join(nextstrain_tree_refine.out.refined)
 	   nextstrain_ancestral(ancestral_inputs)
            translate_inputs = nextstrain_tree_refine.out.refined.join(nextstrain_ancestral.out.ancestral)
            nextstrain_translate(translate_inputs)
@@ -101,7 +136,6 @@ workflow nextstrain_by_lineage {
 	   dirs = manipulate_json.out.final_dirs
 
 }
-
 
 workflow directory_cleanup {
 	

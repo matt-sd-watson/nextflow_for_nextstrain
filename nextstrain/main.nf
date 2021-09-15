@@ -4,7 +4,7 @@ nextflow.enable.dsl=2
 
 import java.nio.file.Paths
 
-include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets; nextstrain_by_lineage; directory_cleanup  } from "./workflow.nf"
+include { nextstrain_augur_refine_clock_iterations; nextstrain_random_subsets; nextstrain_by_lineage; directory_cleanup; nextstrain_random_subsets_no_align } from "./workflow.nf"
 
 // re-write workflows in the separaeete file so that all that is finally imported are the workflows themselves and not individual processes
 // include { nextstrain_tree; nextstrain_tree_refine; nextstrain_tree_refine_clock_iterations } from "./pipeline/pipeline.nf"
@@ -40,6 +40,13 @@ workflow {
   			}
 
 	}
+	if (params.mode == "random_subsets_no_align") {
+		nextstrain_random_subsets_no_align()
+		if (params.clean_dir == true) {
+		   	directory_cleanup(nextstrain_random_subsets_no_align.out.dirs)
+  			}
+	}
+
 	if (params.mode == "random_subsets") {
 		nextstrain_random_subsets()
 		if (params.clean_dir == true) {
