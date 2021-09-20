@@ -44,14 +44,15 @@ Note that parameters specified at runtime through the CLI will override the same
 
 ### Configuration variables
 
-The following parameters can be modified in the nextflow.config to support inputs and runtime parameters: 
+The following parameters can be modified in the nextflow.config to support inputs and runtime parameters. Examples of these parameters can be found below: 
 
 ```
-ubset_number = 100
+help = false
+subset_number = 100
 clockfilteriqd = 10
 alignment_ref = '/home/mwatson/COVID-19/reference/reference.gb'
-metadata = '/home/mwatson/COVID-19/nextstrain_build/metadata/Nextstrain_metadata_180821_full.csv'
-output_dir = '/home/mwatson/COVID-19/one_off/test_nextflow_changes'
+metadata = '/home/mwatson/COVID-19/nextstrain_build/metadata/Nextstrain_metadata_070921_full.csv'
+output_dir = '/home/mwatson/COVID-19/one_off/augur_test_2'
 colortsv = '/home/mwatson/COVID-19/BCC_dev/BCC_nextstrain/config/colors_2.tsv'
 config = '/home/mwatson/COVID-19/BCC_dev/BCC_nextstrain/config/auspice_config.json'
 latlong = '/home/mwatson/COVID-19/BCC_dev/BCC_nextstrain/config/lat_ontario_health_unit.tsv'
@@ -60,19 +61,17 @@ clades = '/home/mwatson/COVID-19/BCC_dev/BCC_nextstrain/config/clades.tsv'
 threads = 1
 cleanup = true
 start_iteration = 1
-stop_iteration = 3
+stop_iteration = 10
 clock = 10
 lineages = ['P.1.1', 'A.23.1', 'C.37']
-lineage_report = '/NetDrive/Projects/COVID-19/Other/master_fasta/lineage_report_all_16-Aug-2021-09-44_most_recent_version.csv'
+lineage_report = '/NetDrive/Projects/COVID-19/Other/master_fasta/lineage_report_all*plearn.csv'
 master_fasta = '/NetDrive/Projects/COVID-19/Other/master_fasta/complete_all*'
+nextalign = '/NetDrive/Projects/COVID-19/Other/master_fasta/alignment/complete_all*'
 cache = ''
 tracedir = "${params.output_dir}/pipeline_info"
 refineseed = 10
-clean_dir = true
-
-// paths for the master lineage report and master FASTA for PHO sequences
-lineage_report = '/NetDrive/Projects/COVID-19/Other/master_fasta/lineage_report_all*'
-master_fasta = '/NetDrive/Projects/COVID-19/Other/master_fasta/complete*'
+clean_dir = false
+make_alignment = false
 ```
 
 
@@ -90,11 +89,23 @@ To enable singularity containeriation at runtime, the user can specify this opti
 
 
 ```
-export SINGULARITY_BIND="/NetDrive/Projects/COVID-19/Other/master_fasta"
-nextflow run COVID-19/BCC_dev/ncov-nf/nextstrain/ --mode refine_iterations -profile singularity
+nextflow run ~nextflow_for_bioinformatics/nextstrain/ --mode refine_iterations -profile singularity
 ```
 
-The SINGULARITY_BIND variable contains the bound variables for the paths to files on mounted drives. This variablec an either be exported explicitly before runtime as shown above, or modified in the nextflow.config under the singularity profile, runOption parameter. 
+
+The SINGULARITY_BIND variable contains the bound variables for the paths to files on mounted drives. This variable can either be exported explicitly before runtime as shown below:
+
+```
+export SINGULARITY_BIND="/NetDrive/Projects/COVID-19/Other/master_fasta"
+```
+
+or modified in the nextflow.config under the singularity profile, runOption parameter. 
+
+nextflow_nextstrain also supports running through either a docker or conda profile (not recommended). using docker can assist when the user does not have root access to the environment where nextflow is being executed. This also allows for resource management without requiring sudo access (as is the case with singularity containers).
+
+Running the pipeline just through a conda environment is not recommended.
+
+
 
 
 

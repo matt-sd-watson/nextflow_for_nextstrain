@@ -28,7 +28,6 @@ process manipulate_json {
 // remove any unecessary files from generating test statistics
 process clean_directories {
 
-
 	input: 
 	val location
 
