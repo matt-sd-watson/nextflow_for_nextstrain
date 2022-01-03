@@ -1,0 +1,47 @@
+name: nextflow_for_nextstrain CI
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env:
+      NXF_VER: ${{ matrix.nxf_ver }}
+      NXF_ANSI_LOG: false
+    strategy:
+      matrix:
+        # Nextflow versions: check pipeline minimum and current latest
+        nxf_ver: ['20.10.0', '21.03.0-edge']
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Verify the Dockerfile, Singularity image, and conda env files
+        shell: bash -l {0}
+        with:
+          FILES: |
+            environments/Dockerfile
+            environments/environment.yml
+            environments/Singularity
+            environments/create_docker_container.sh
+            
+      - name: Create Docker container
+        shell: bash -l {0}
+        run: |
+          cd environments/
+          docker build -t nextflow_nextstrain .
+      
+      - name: Install Nextflow
+        shell: bash -l {0}
+        env:
+          CAPSULE_LOG: none
+        run: |
+          wget -qO- get.nextflow.io | bash
+          sudo mv nextflow /usr/local/bin/
+
