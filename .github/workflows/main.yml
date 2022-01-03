@@ -20,8 +20,10 @@ jobs:
         # Nextflow versions: check pipeline minimum and current latest
         nxf_ver: ['20.10.0', '21.03.0-edge']
     steps:
-      - name: Check out pipeline code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: eWaterCycle/setup-singularity@v7
+        with:
+          singularity-version: 3.8.3
       
       - name: Verify the Dockerfile, Singularity image, and conda env files
         uses: technote-space/get-diff-action@v4
@@ -33,8 +35,6 @@ jobs:
             environments/create_docker_container.sh
             
       - name: Create Singularity container
-        with:
-          singularity-version: 3.8.3
         run: |
           cd environments/
           sudo singularity build ../nextflow_nextstrain.sif Singularity
