@@ -22,12 +22,9 @@ jobs:
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
-
-      - name: Check if Dockerfile or Conda environment changed
-        uses: technote-space/get-diff-action@v4
       
       - name: Verify the Dockerfile, Singularity image, and conda env files
-        shell: bash -l {0}
+        uses: technote-space/get-diff-action@v4
         with:
           FILES: |
             environments/Dockerfile
