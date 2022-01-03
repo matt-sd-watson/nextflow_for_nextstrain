@@ -25,18 +25,12 @@ jobs:
         with:
           singularity-version: 3.8.3
             
-      - name: Create Singularity container
+      - name: Create Singularity and Docker containers
         run: |
           cd environments/
           singularity build --fakeroot ../nextflow_nextstrain.sif Singularity
-            
-      - name: Create Docker container
-        shell: bash -l {0}
-        run: |
-          cd
-          cd environments/
           docker build -t nextflow_nextstrain .
-      
+          
       - name: Install Nextflow
         shell: bash -l {0}
         env:
