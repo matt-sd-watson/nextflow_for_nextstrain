@@ -24,6 +24,9 @@ jobs:
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
+          
+      - name: Install sudo package
+        run: apt update && apt install sudo
             
       - name: Create Singularity container
         run: |
