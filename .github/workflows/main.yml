@@ -28,7 +28,7 @@ jobs:
       - name: Create Singularity container
         run: |
           cd environments/
-          singularity build ../nextflow_nextstrain.sif Singularity --fakeroot
+          singularity build --fakeroot ../nextflow_nextstrain.sif Singularity
             
       - name: Create Docker container
         shell: bash -l {0}
