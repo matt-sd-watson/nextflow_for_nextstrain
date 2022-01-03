@@ -24,15 +24,6 @@ jobs:
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
-      
-      - name: Verify the Dockerfile, Singularity image, and conda env files
-        uses: technote-space/get-diff-action@v4
-        with:
-          FILES: |
-            environments/Dockerfile
-            environments/environment.yml
-            environments/Singularity
-            environments/create_docker_container.sh
             
       - name: Create Singularity container
         run: |
