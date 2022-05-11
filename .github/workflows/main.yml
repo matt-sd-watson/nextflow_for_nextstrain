@@ -10,7 +10,7 @@ on:
       
 jobs:
   build:
-    # The type of runner that the job will run on
+  
     runs-on: ubuntu-latest
     env:
       NXF_VER: ${{ matrix.nxf_ver }}
@@ -25,18 +25,11 @@ jobs:
         with:
           singularity-version: 3.8.3
           python-version: 3.8
-
+          
       - name: Fix up git URLs as per https://stackoverflow.com/questions/70663523/the-unauthenticated-git-protocol-on-port-9418-is-no-longer-supported
         run: |
           echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
           git config --global url."git@github.com:".insteadOf git://github.com/
-          
-      - name: Install conda environment and check dependencies
-        run: |
-          $CONDA/bin/conda env create -f environments/environment.yml
-          $CONDA/bin/conda activate nf_nextstrain
-          R --version && python --version && augur --version && mafft --version && nextstrain --version
-          $CONDA/bin/conda deactivate
             
       - name: Create Singularity container and test module installation
         run: |
@@ -57,4 +50,14 @@ jobs:
         run: |
           wget -qO- get.nextflow.io | bash
           sudo mv nextflow /usr/local/bin/
+          
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: environments/environment.yml
+          activate-environment: nf_nextstrain
+          channels: conda-forge,bioconda,defaults
+          mamba-version: "*"  
+      - name: test conda env dependencies
+        run: R --version && python --version && augur --version && mafft --version && nextstrain --version
+
 
