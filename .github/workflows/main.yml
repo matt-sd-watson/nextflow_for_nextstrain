@@ -34,9 +34,9 @@ jobs:
       - name: Install conda environment and check dependencies
         run: |
           $CONDA/bin/conda env create -f environments/environment.yml
-          conda activate nf_nextstrain
+          $CONDA/bin/conda activate nf_nextstrain
           R --version && python --version && augur --version && mafft --version && nextstrain --version
-          conda deactivate
+          $CONDA/bin/conda deactivate
             
       - name: Create Singularity container and test module installation
         run: |
