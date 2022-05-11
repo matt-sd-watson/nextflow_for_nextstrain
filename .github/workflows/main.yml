@@ -32,13 +32,13 @@ jobs:
         run: |
           cd environments/
           singularity build --fakeroot ../nextflow_nextstrain.sif Singularity
-          singularity exec ../nextflow_nextstrain.sif R --version && python --version && augur --version
+          singularity exec ../nextflow_nextstrain.sif R --version && python --version && augur --version && mafft --version && nextstrain --version
 
       - name: Create Docker container and test module installation
         run: |
           cd environments/
           docker build -t nextflow_nextstrain .
-          docker exec nextflow_nextstrain R --version && python --version && augur --version
+          docker exec nextflow_nextstrain R --version && python --version && augur --version && mafft --version && nextstrain --version
           
       - name: Install Nextflow
         shell: bash -l {0}
