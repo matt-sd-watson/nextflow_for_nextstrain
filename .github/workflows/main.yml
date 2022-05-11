@@ -40,7 +40,7 @@ jobs:
       - name: Create Docker container and test module installation
         run: |
           cd environments/
-          docker build -t nextflow_nextstrain .
+          docker build -t nextflow_nextstrain -m 6g .
           docker exec nextflow_nextstrain R --version && python --version
           
       - name: Install Nextflow
