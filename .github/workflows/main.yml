@@ -24,23 +24,31 @@ jobs:
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
-          
+          python-version: 3.8
+
       - name: Fix up git URLs as per https://stackoverflow.com/questions/70663523/the-unauthenticated-git-protocol-on-port-9418-is-no-longer-supported
         run: |
           echo -e '[url "https://github.com/"]\n  insteadOf = "git://github.com/"' >> ~/.gitconfig
           git config --global url."git@github.com:".insteadOf git://github.com/
+          
+      - name: Install conda environment and check dependencies
+        run: |
+          $CONDA/bin/conda env create -f environments/environment.yml
+          conda activate nf_nextstrain
+          R --version && python --version && augur --version && mafft --version && nextstrain --version
+          conda deactivate
             
       - name: Create Singularity container and test module installation
         run: |
           cd environments/
           singularity build --fakeroot ../nextflow_nextstrain.sif Singularity
-          singularity exec ../nextflow_nextstrain.sif R --version && python --version && augur --version && mafft --version && nextstrain --version
+          singularity exec ../nextflow_nextstrain.sif R --version && python --version
 
       - name: Create Docker container and test module installation
         run: |
           cd environments/
           docker build -t nextflow_nextstrain .
-          docker exec nextflow_nextstrain R --version && python --version && augur --version && mafft --version && nextstrain --version
+          docker exec nextflow_nextstrain R --version && python --version
           
       - name: Install Nextflow
         shell: bash -l {0}
