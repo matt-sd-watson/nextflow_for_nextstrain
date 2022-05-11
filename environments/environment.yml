@@ -4,28 +4,27 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - augur=12.0.0
-  - auspice=2.23.0
-  - backports=1.0
+  - augur=>12.0.0
+  - auspice=>2.23.0
+  - backports
   - biopython
   - chardet
   - fasttree
-  - mafft=7.480
-  - matplotlib-base=3.4.2
-  - nextalign=1.2.0
-  - nextflow=21.04.0
-  - nodejs=15.14.0
+  - mafft=>7.480
+  - nextalign=>1.2.0
+  - nextflow=>21.04.0
+  - nodejs=>15.14.0
   - numpy=>1.21.0
   - pandas=>1.2.5
-  - pango=1.48.6
+  - pango=>1.48.6
   - pip
   - pytest=>6.2.4
   - python=>3.8.10
-  - raxml=8.2.12
-  - snakemake=6.5.1
-  - snakemake-minimal=6.5.1
-  - traitlets=5.0.5
-  - treetime=0.8.1
+  - raxml=>8.2.12
+  - snakemake=>6.5.1
+  - snakemake-minimal=>6.5.1
+  - traitlets=>5.0.5
+  - treetime==0.8.1
   - pip:
     - nextstrain-cli==3.0.3
     - git+https://github.com/matt-sd-watson/FASTAfurious
