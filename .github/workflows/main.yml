@@ -9,8 +9,22 @@ on:
       - main
       
 jobs:
-  build:
-  
+  conda:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: environments/environment.yml
+          activate-environment: ncov_outbreaker
+          channels: conda-forge,bioconda,defaults,r
+          mamba-version: "*"
+      - name: test conda env dependencies
+        run: R --version && python --version && augur --version && mafft --version && nextstrain --version
+  containers:
     runs-on: ubuntu-latest
     env:
       NXF_VER: ${{ matrix.nxf_ver }}
@@ -24,7 +38,6 @@ jobs:
       - uses: eWaterCycle/setup-singularity@v7
         with:
           singularity-version: 3.8.3
-          python-version: 3.8
           
       - name: Fix up git URLs as per https://stackoverflow.com/questions/70663523/the-unauthenticated-git-protocol-on-port-9418-is-no-longer-supported
         run: |
@@ -49,14 +62,3 @@ jobs:
         run: |
           wget -qO- get.nextflow.io | bash
           sudo mv nextflow /usr/local/bin/
-          
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          environment-file: environments/environment.yml
-          activate-environment: nf_nextstrain
-          channels: conda-forge,bioconda,defaults
-          mamba-version: "*"  
-      - name: test conda env dependencies
-        run: R --version && python --version && augur --version && mafft --version && nextstrain --version
-
-
