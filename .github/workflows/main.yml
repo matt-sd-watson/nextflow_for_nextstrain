@@ -37,11 +37,10 @@ jobs:
           singularity build --fakeroot ../nextflow_nextstrain.sif Singularity
           singularity exec ../nextflow_nextstrain.sif R --version && python --version
 
-      - name: Create Docker container and test module installation
+      - name: Create Docker container (module tests in image instructions)
         run: |
           cd environments/
           docker build -t nextflow_nextstrain -m 6g .
-          docker exec nextflow_nextstrain R --version && python --version
           
       - name: Install Nextflow
         shell: bash -l {0}
