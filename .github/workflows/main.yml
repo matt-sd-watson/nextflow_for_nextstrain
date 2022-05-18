@@ -23,7 +23,7 @@ jobs:
           channels: conda-forge,bioconda,defaults,r
           mamba-version: "*"
       - name: test conda env dependencies
-        run: R --version && python --version && augur --version && mafft --version && nextstrain --version
+        run: R --version && python --version
   containers:
     runs-on: ubuntu-latest
     env:
